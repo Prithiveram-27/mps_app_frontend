@@ -118,7 +118,7 @@ const ProductListing = ({ items }) => {
 };
 
 const handleModalEdit = () => {
-  if (productName.trim() !== '' && productAmount.trim() !== '') {
+  if ((productName !== '' && productName !== null) && (productAmount!== ''&& productAmount !== null)) {
     EditProduct();
   } else {
       setShowError(true);
@@ -162,10 +162,14 @@ const handleModalEdit = () => {
 
   const handleAddProductButtonClick = () => {
     setIsEditMode(false);
+    setProductAmount('');
+    setProductName('');
     setShowModal(true); // Show the modal
   };
 
   const handleCloseModal = () => {
+    setShowSuccessMessage(false);
+    setShowError(false);
     setShowModal(false); // Hide the modal
   };
 
