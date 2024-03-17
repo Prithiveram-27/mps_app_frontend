@@ -1,7 +1,7 @@
 // App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import CustomerListingScreen from './Pages/CustomerListing/CustomerListingScreen';
+import Dashboard from './Pages/Dashboard/dashboardScreen';
 import ProductListing from './Pages/Product/productListing';
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<CustomerListingScreen />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/ProductListing" element={<ProductListing />} />
 
         </Routes>
