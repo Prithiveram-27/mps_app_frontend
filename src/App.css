@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  display: flex;
 }
 
 .App-logo {
@@ -35,4 +36,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Sidebar {
+  flex: 0 0 40%; /* Sidebar takes up 40% of the width */
+}
+
+.content {
+  flex: 1; /* ProductListing takes up remaining space (60%) */
 }

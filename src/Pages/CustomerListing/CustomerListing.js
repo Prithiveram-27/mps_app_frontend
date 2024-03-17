@@ -4,44 +4,110 @@ import { Container, Row, Col, Card,Navbar,Form,FormControl,Button } from 'react-
 import './CustomerListing.css';
 
 const CustomerListing = ({ items }) => {
-  return (
-    <div>
-      <div>
-        <Navbar className="p-4" style={{ background: "#2D9596", height: "50px" }}>
-              <Navbar.Brand  className="mx-auto" style={{ color: "#F1FADA",fontSize: "30px",fontWeight: "bold",marginLeft: "50px" }}>
-                  MPS
-              </Navbar.Brand>
-        </Navbar>
-        <br/>
-        <Container>
-            <Row className="justify-content-center align-items-center vh-100">
-                <Col md={6}>
-                    <Form inline className="p-4">
-                        <FormControl type="text" placeholder="Search" className="mr-sm-2 search-input" />
-                        <Button variant="outline-success" className="search-button">Search</Button>
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
-      </div>
-      <br/>
-      <Container>
-        <Row>
-          {items.map((customer, index) => (
-            <Col key={index}  className="mb-3">
-              <Card style={{ backgroundColor: '#f0ad4e', color: 'white', borderRadius: '10px' }} className="px-3 py-2">
-                <Card.Title>{customer.name}</Card.Title>
-                <Card.Text>
-                  <strong>Address:</strong> {customer.address}<br />
-                  <strong>Phone:</strong> {customer.phone}
-                </Card.Text>
-              </Card>
-            </Col>
+  <>
+  <CreateNavbar />
+  <br />
+  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px' }}>
+      <Button onClick={handleAddProductButtonClick}>Add Product</Button>
+  </div>
+  <Container>
+      <Table table-striped bordered hover  className="custom-table">
+      <thead>
+          <tr>
+          <th width="30">SI.NO</th>
+          <th width="120">Product Name</th>
+          <th width="100">Amount</th>
+          <th width="100">Options</th>
+          </tr>
+      </thead>
+      <tbody>
+          {productData.map((product, index) => (
+          <tr  className={`table_font_color ${index % 2 === 0 ? 'table-striped' : ''}`} key={index}>
+              <td>{index + 1}</td>
+              <td>{product.productname}</td>
+              <td>{product.amount}</td>
+              <td>
+              <Button
+                  variant="secondary"
+                  style={{ height: '40px', width: '80px' }} // Adjust height and width
+                  onClick={() => handleEditButtonClick(product.productId)} // Pass productId to the handler
+              >Edit</Button>
+              &nbsp;&nbsp;
+              <Button
+                  variant="danger"
+                  style={{ height: '40px', width: '80px' }} // Adjust height and width
+                  onClick={() => handleEditButtonClick(product.productId)} // Pass productId to the handler
+              >Delete</Button>
+              </td>
+          </tr>
           ))}
-        </Row>
-    </Container>
-    </div>
-  );
+      </tbody>
+      </Table>
+  </Container>
+  <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal.Header className='Modal-header' style={{height:'40px', }} closeButton>
+      <Modal.Title>Add Product</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+              {showPreloader && (
+              <div className="preloader-container">
+              <div className="preloader"></div>
+              </div>
+              )}
+              <Form>
+              <Row>
+                  <Col>
+                      <Form.Group>
+                      <Form.Label>Enter Product Name:</Form.Label>
+                      </Form.Group>
+                  </Col>
+                  <Col>
+                      <Form.Group>
+                      <Form.Control
+                          type="text"
+                          placeholder="Product Name"
+                          value={productName}
+                          onChange={(e) => setProductName(e.target.value)}
+                      />
+                      </Form.Group>
+                  </Col>
+              </Row>
+              <br/>
+              <Row>
+                  <Col>
+                      <Form.Group>
+                      <Form.Label>Enter Product Amount:</Form.Label>
+                      </Form.Group>
+                  </Col>
+                  <Col>
+                      <Form.Group>
+                      <Form.Control
+                          type="text"
+                          placeholder="Product Amount"
+                          value={productAmount}
+                          onChange={(e) => setProductAmount(e.target.value)}
+                      />
+                      </Form.Group>
+                  </Col>
+              </Row>
+              {showSuccessMessage && (
+              <Alert variant="success" className="mt-3">
+                  Product saved successfully!
+              </Alert>
+              )}
+              {showError && (
+                      <Alert variant="danger" className="mt-3">
+                          Product name and amount cannot be empty!
+                      </Alert>
+                  )}
+          </Form>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+      <Button variant="primary" onClick={handleSaveProduct}>Save</Button>
+      </Modal.Footer>
+  </Modal>
+</>
 };
 
 export default CustomerListing;
