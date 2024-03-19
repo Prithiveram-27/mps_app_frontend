@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table,Button,Modal,Form,Row, Col, Alert} from 'react-bootstrap';
+import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 import CreateNavbar from '../../components/navbar';
 import './productlisting.css';
 import '../../components/preloader/preloader.css';
@@ -17,6 +20,8 @@ const ProductListing = ({ items }) => {
   const [showPreloader, setShowPreloader] = useState(false);
   const [showError, setShowError] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [sizePerPage, setSizePerPage] = useState(5);
+
 
 
     // Function to fetch data from the API
@@ -173,6 +178,38 @@ const handleModalEdit = () => {
     setShowModal(false); // Hide the modal
   };
 
+  const columns = [
+    { dataField: 'productname', text: 'Product Name' },
+    { dataField: 'amount', text: 'Amount' },
+    {
+      dataField: 'actions',
+      text: 'Actions',
+      formatter: (cell, row) => (
+        <>
+          <Button variant="secondary" style={{ height: '40px', width: '80px' }} onClick={() => handleEditButtonClick(row.product_id)}>Edit</Button>
+          &nbsp;&nbsp;
+          <Button variant="danger" style={{ height: '40px', width: '80px' }} onClick={() => handleDeleteButtonClick(row.product_id)}>Delete</Button>
+        </>
+      )
+    }
+  ];
+
+  const paginationOptions = {
+    sizePerPageList: [{
+      text: '5', value: 5
+    }, {
+      text: '10', value: 10
+    }, {
+      text: 'All', value: productData.length
+    }],
+    sizePerPage: sizePerPage,
+    onSizePerPageChange: (sizePerPage) => {
+      setSizePerPage(sizePerPage);
+    },
+    hideSizePerPage:true
+  };
+  
+
   return (
     <>
         <CreateNavbar />
@@ -186,38 +223,16 @@ const handleModalEdit = () => {
                     <div className="preloader"></div>
                     </div>
                     )}
-            <Table table-striped bordered hover  className="custom-table">
-              <thead>
-                  <tr>
-                  <th width="30">SI.NO</th>
-                  <th width="120">Product Name</th>
-                  <th width="100">Amount</th>
-                  <th width="100">Options</th>
-                  </tr>
-              </thead>
-              <tbody>
-                {productData.map((product, index) => (
-                    <tr className={`table_font_color ${index % 2 === 0 ? 'table-striped' : ''}`} key={index}>
-                        <td>{index + 1}</td>
-                        <td>{product.productname}</td>
-                        <td>{product.amount}</td>
-                        <td>
-                            <Button
-                                variant="secondary"
-                                style={{ height: '40px', width: '80px' }} // Adjust height and width
-                                onClick={() => handleEditButtonClick(product.product_id)} // Pass productId to the handler
-                            >Edit</Button>
-                            &nbsp;&nbsp;
-                            <Button
-                                variant="danger"
-                                style={{ height: '40px', width: '80px' }} // Adjust height and width
-                                onClick={() => handleDeleteButtonClick(product.product_id)} // Pass productId to the handler
-                            >Delete</Button>
-                        </td>
-                    </tr>
-                ))}
-              </tbody>
-            </Table>
+            <BootstrapTable
+          keyField="product_id"
+          data={productData}
+          columns={columns}
+          striped
+          hover
+          bootstrap4
+          pagination={paginationFactory({ ...paginationOptions, sizePerPage })}
+          wrapperClasses="table-responsive" // To make the table scrollable
+        />
             {showDeleteSuccessMessage && (
               <Alert variant="success" className="mt-3" style={{ position: 'fixed', top: 0, left: '50%', transform: 'translateX(-50%)', zIndex: 9999, width: '50%', textAlign: 'center' }}>
                 Product Deleted successfully!
