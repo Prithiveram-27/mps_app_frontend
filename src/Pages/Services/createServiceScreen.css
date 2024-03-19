@@ -1,0 +1,44 @@
+.dropdown {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown select {
+    width: 100%;
+    appearance: none; /* Remove default appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff; /* Background color */
+    border: 1px solid #ccc; /* Border */
+    padding: 8px 30px 8px 8px; /* Padding */
+    font-size: 16px; /* Font size */
+    border-radius: 4px; /* Border radius */
+  }
+  
+  .dropdown-icon {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+  }
+  
+  /* Style for the dropdown icon */
+  .dropdown-icon i {
+    font-size: 12px; /* Icon size */
+    color: #888; /* Icon color */
+  }
+  
+  .radio-border .custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #007bff; /* Border color when checked */
+  }
+  
+  .radio-border .custom-control-label::before {
+    border: 8px solid #888; /* Border color */
+    border-radius: 8px; /* Border radius */
+  }
+  
+  .radio-border {
+    margin-bottom: 5px; /* Adjust margin between radio buttons */
+  }
+  

@@ -6,6 +6,7 @@ import CustomerListing from './Pages/CustomerListing/CustomerListingScreen';
 import ProductListing from './Pages/Product/productListing';
 import Sidebar from './components/sidenav';
 import CreateCustomer from './Pages/CustomerListing/createCustomer';
+import CreateService from './Pages/Services/createServiceScreen';
 import './App.css';
 
 function App() {
@@ -16,9 +17,11 @@ function App() {
       <div className="content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/" element={<CustomerListing />} />
+          <Route path="/CustomerListing" element={<CustomerListing />} />
           <Route path="/ProductListing" element={<ProductListing />} />
           <Route path="/createCustomer" element={<CreateCustomer />} />
+          <Route path="/CreateService" element={<CreateService />} />
+
         </Routes>
         </div>
       </div>
