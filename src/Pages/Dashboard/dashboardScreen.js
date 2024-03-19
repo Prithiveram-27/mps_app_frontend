@@ -15,7 +15,7 @@ const DashboardCard = ({ title, count }) => {
         <Card.Text className="text-center">{count}</Card.Text>
       </Card.Body>
       <Card.Footer>
-        <Button variant="primary" block>View Details</Button>
+        <Button className='button-mps' block>View Details</Button>
       </Card.Footer>
     </Card>
   </Col>

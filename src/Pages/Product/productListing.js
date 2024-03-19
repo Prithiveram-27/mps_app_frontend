@@ -173,9 +173,10 @@ const handleModalEdit = () => {
   };
 
   const handleCloseModal = () => {
+    setShowModal(false);
     setShowSuccessMessage(false);
     setShowError(false);
-    setShowModal(false); // Hide the modal
+    window.location.reload();
   };
 
   const columns = [
@@ -186,13 +187,26 @@ const handleModalEdit = () => {
       text: 'Actions',
       formatter: (cell, row) => (
         <>
-          <Button variant="secondary" style={{ height: '40px', width: '80px' }} onClick={() => handleEditButtonClick(row.product_id)}>Edit</Button>
+          <Button
+            variant="secondary"
+            style={{ height: '40px', width: '80px' }}
+            onClick={() => handleEditButtonClick(row.product_id)}
+          >
+            Edit
+          </Button>
           &nbsp;&nbsp;
-          <Button variant="danger" style={{ height: '40px', width: '80px' }} onClick={() => handleDeleteButtonClick(row.product_id)}>Delete</Button>
+          <Button
+            variant="danger"
+            style={{ height: '40px', width: '80px' }}
+            onClick={() => handleDeleteButtonClick(row.product_id)}
+          >
+            Delete
+          </Button>
         </>
       )
     }
   ];
+  
 
   const paginationOptions = {
     sizePerPageList: [{
@@ -215,7 +229,7 @@ const handleModalEdit = () => {
         <CreateNavbar />
         <br />
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px' }}>
-            <Button onClick={handleAddProductButtonClick}>Add Product</Button>
+            <Button className='button-mps' onClick={handleAddProductButtonClick}>Add Product</Button>
         </div>
         <Container>
         {showPreloader && (
@@ -299,7 +313,7 @@ const handleModalEdit = () => {
             </Modal.Body>
             <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-            <Button variant="primary" onClick={isEditMode ? handleModalEdit: handleModalSave}>Save</Button>
+            <Button className='button-mps' onClick={isEditMode ? handleModalEdit: handleModalSave}>Save</Button>
             </Modal.Footer>
         </Modal>
     </>

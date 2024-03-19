@@ -48,7 +48,7 @@ const CustomerListing = ({ items }) => {
         <CreateNavbar />
         <br />
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px', marginRight: '10px' }}>
-            <Link to="/ProductListing">
+            <Link to="/createCustomer">
         <button>Add Customer</button>
       </Link>
         </div>

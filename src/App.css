@@ -45,3 +45,11 @@
 .content {
   flex: 1; /* ProductListing takes up remaining space (60%) */
 }
+
+.button-mps {
+  background-color: #145DA0;
+}
+
+.button-mps:hover {
+  background-color: #0C2D48; /* Darken the color on hover if desired */
+}
