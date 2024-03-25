@@ -176,7 +176,7 @@ const handleModalEdit = () => {
     setShowModal(false);
     setShowSuccessMessage(false);
     setShowError(false);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const columns = [
@@ -253,7 +253,8 @@ const handleModalEdit = () => {
               </Alert>
             )}
         </Container>
-        <Modal show={showModal} onHide={handleCloseModal}>
+        {showModal&&(
+        <Modal show onHide={handleCloseModal}>
             <Modal.Header className='Modal-header' style={{height:'40px', }} closeButton>
             <Modal.Title>{isEditMode ? 'Edit Product' : 'Add Product'}</Modal.Title>
             </Modal.Header>
@@ -316,6 +317,7 @@ const handleModalEdit = () => {
             <Button className='button-mps' onClick={isEditMode ? handleModalEdit: handleModalSave}>Save</Button>
             </Modal.Footer>
         </Modal>
+        )}
     </>
   );
 };
