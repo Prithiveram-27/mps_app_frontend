@@ -1,0 +1,35 @@
+.textfieldIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.textfieldParentContainer {
+  display: flex;
+  border-radius: 5px;
+  border: 1px solid #d7d7d7;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  color: #999999;
+  text-align: left;
+  overflow: hidden;
+  width: 340px;
+  padding: 8px;
+}
+.textfield {
+  border: none;
+  max-height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+.textfield:hover:focus:active {
+  border: none;
+}
+.textfield:focus-visible {
+  outline-style: none;
+}
+.textfield:disabled {
+  background-color: #f9f9f9;
+}

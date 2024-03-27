@@ -1,0 +1,25 @@
+.selectParentContainer{
+    display: flex;
+    border-radius: 5px;
+    border: 1px solid #d7d7d7;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    color: #999999;
+    text-align: left;
+    overflow: hidden;
+    width: 340px;
+    padding: 5px;
+}
+.selectParentContainer:hover:focus:active{
+    border: 1px solid #d7d7d7;
+}
+.selectParentContainer:focus-visible{
+    outline-style: none;
+}
+.selectParentContainer:disabled{
+    background-color: #ffffff;
+}
+.selectParentContainer > option:is(:checked){
+    background-color: rgba(10, 91, 153, 0.08) !important;
+}
