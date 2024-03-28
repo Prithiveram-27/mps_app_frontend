@@ -43,6 +43,7 @@ export const Select = ({
   const combinedStyle = {
     height: size === "large" ? "40px" : size === "small" ? "32px" : "36px",
     fontSize: size === "large" ? "18px" : size === "small" ? "14px" : "16px",
+    color: "black",
     ...style,
   };
   return (

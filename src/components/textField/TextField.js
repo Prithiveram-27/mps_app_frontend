@@ -69,6 +69,7 @@ export const TextField = ({
               size === "large" ? "18px" : size === "small" ? "14px" : "16px",
             cursor: disabled ? "not-allowed" : "",
             ...textFieldStyle,
+            color: "black",
           }}
         />
       </div>
