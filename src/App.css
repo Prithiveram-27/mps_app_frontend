@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
   display: flex;
 }
 
@@ -47,9 +47,9 @@
 }
 
 .button-mps {
-  background-color: #145DA0;
+  background-color: #145da0;
 }
 
 .button-mps:hover {
-  background-color: #0C2D48; /* Darken the color on hover if desired */
+  background-color: #0c2d48; /* Darken the color on hover if desired */
 }

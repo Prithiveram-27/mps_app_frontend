@@ -66,6 +66,21 @@ const CustomerListing = ({ items }) => {
     alternateMobileNumber: Yup.string()
       .min(10, "Please enter a valid Mobile Number.")
       .max(10, "Please enter a valid Mobile Number."),
+    amc: Yup.string(),
+    amcStartDate: Yup.date().test({
+      name: "amc-start-date",
+      test: function (value) {
+        return this.parent.amc === "enabled" ? !!value : true;
+      },
+      message: "AMC start date is required.",
+    }),
+    amcEndDate: Yup.date().test({
+      name: "amc-end-date",
+      test: function (value) {
+        return this.parent.amc === "enabled" ? !!value : true;
+      },
+      message: "AMC end date is required.",
+    }),
   });
 
   // State to store the fetched data
@@ -139,6 +154,7 @@ const CustomerListing = ({ items }) => {
     initialValues: { ...initial },
     validationSchema: createCustomerSchema,
     onSubmit: (values) => {
+      values.name = `${values?.firstName} ${values?.lastName || ""}`;
       console.log("values", values);
       axios
         .post("http://localhost:3000/api/v1/customers/getAllCustomers", values)
@@ -441,7 +457,7 @@ const CustomerListing = ({ items }) => {
                 <Select
                   name="activityPerson"
                   value={formik.values.activityPerson}
-                  onChange={formik.handleChange}
+                  onChange={(e) => formik.setFieldValue("activityPerson", e)}
                 >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="kishore">Kishore</MenuItem>
@@ -461,32 +477,78 @@ const CustomerListing = ({ items }) => {
                 <Select
                   name="amc"
                   value={formik.values.amc}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    console.log("amc value", e);
+                    formik.setFieldValue("amc", e);
+                    if (e === "enabled") {
+                      formik.setFieldValue("amcStartDate", "");
+                      formik.setFieldValue("amcEndDate", "");
+                      formik.setFieldError("amcStartDate", undefined);
+                      formik.setFieldError("amcEndDate", undefined);
+                    } else {
+                      formik.setFieldValue("amcStartDate", undefined);
+                      formik.setFieldValue("amcEndDate", undefined);
+                      formik.setFieldError("amcStartDate", undefined);
+                      formik.setFieldError("amcEndDate", undefined);
+                    }
+                  }}
                 >
                   <MenuItem value="enabled">Enabled</MenuItem>
                   <MenuItem value="disabled">Disabled</MenuItem>
                 </Select>
-                {/* <InputLabel className="customer-field-label">
-                  Last Service Date
-                </InputLabel>
-                <DatePicker
-                  disabled
-                  style={{ width: "94%" }}
-                  // className="customer-field"
-                  character="-"
-                  format="dd-MM-yyyy"
-                  size="md"
-                  placeholder="To Date"
-                  onChange={(date) => setDate(date)}
-                  value={date}
-                  renderValue={(date) => {
-                    return `${new Date(date).toLocaleDateString(
-                      "en-EN",
-                      options
-                    )}`;
-                  }}
-                /> */}
               </Grid>
+
+              {formik.values.amc === "enabled" && (
+                <>
+                  <Grid item xs={12} md={6}>
+                    <InputLabel className="customer-field-label">
+                      AMC Start Date
+                    </InputLabel>
+                    <DatePicker
+                      style={{ width: "94%" }}
+                      character="-"
+                      format="dd-MM-yyyy"
+                      size="md"
+                      placeholder="AMC Start Date"
+                      name="amcStartDate"
+                      value={formik.values.amcStartDate}
+                      onChange={(value) =>
+                        formik.setFieldValue("amcStartDate", value)
+                      }
+                      placement="topStart"
+                    />
+                    {formik.errors.amcStartDate ? (
+                      <InputLabel sx={{ color: "red !important" }}>
+                        {formik.errors.amcStartDate}
+                      </InputLabel>
+                    ) : null}
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <InputLabel className="customer-field-label">
+                      AMC End Date
+                    </InputLabel>
+                    <DatePicker
+                      style={{ width: "94%" }}
+                      character="-"
+                      format="dd-MM-yyyy"
+                      size="md"
+                      placeholder="AMC End Date"
+                      name="amcEndDate"
+                      value={formik.values.amcEndDate}
+                      onChange={(value) =>
+                        formik.setFieldValue("amcEndDate", value)
+                      }
+                      placement="topStart"
+                    />
+                    {formik.errors.amcEndDate ? (
+                      <InputLabel sx={{ color: "red !important" }}>
+                        {formik.errors.amcEndDate}
+                      </InputLabel>
+                    ) : null}
+                  </Grid>
+                </>
+              )}
+
               <Grid item xs={12} md={6}>
                 <InputLabel className="customer-field-label">
                   Next Service Date
