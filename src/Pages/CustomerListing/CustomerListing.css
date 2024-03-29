@@ -39,6 +39,25 @@
   display: none !important;
 }
 
+.placement-bottom-start {
+  z-index: 99 !important;
+}
+
+.rs-picker-daterange-menu {
+  z-index: 10000000000 !important;
+}
+
+.rs-picker-daterange-content {
+  z-index: 10000000000 !important;
+}
+
+.rs-picker-menu {
+  z-index: 99999 !important;
+}
+.rs-picker-popup.rs-picker-popup-date {
+  z-index: 9999999 !important;
+}
+
 .customer-field-label {
   color: black !important;
 }
