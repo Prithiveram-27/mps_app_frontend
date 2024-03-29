@@ -141,7 +141,7 @@ const CustomerListing = ({ items }) => {
     onSubmit: (values) => {
       console.log("values", values);
       axios
-        .post("http://localhost:3000/api/v1/customers/getAllCustomers", values)
+        .post("http://localhost:3000/api/v1/customers/createCustomer", values)
         .then(() => {
           handleCloseAddCustomerModal();
           setOpenNotification(true);
