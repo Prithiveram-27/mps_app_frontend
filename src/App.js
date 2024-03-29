@@ -72,6 +72,7 @@ function App() {
       </div>
       {/* </Router> */}
     </div>
+    </div>
   );
 }
 
