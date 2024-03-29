@@ -390,7 +390,7 @@ const CustomerListing = ({ items }) => {
                 <Select
                   name="brand"
                   value={formik.values.brand}
-                  onChange={formik.handleChange}
+                  onChange = {(e) => formik.setFieldValue("brand",e)}
                 >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="nike">Nike</MenuItem>
