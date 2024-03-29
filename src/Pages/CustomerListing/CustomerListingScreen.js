@@ -167,7 +167,7 @@ const CustomerListing = ({ items }) => {
         })
         .catch((error) => {
           setOpenNotification(true);
-          setNotification("An error occurred. Please try again");
+          setNotification(`${error.response.data.error}`);
           setNotificationSeverity("error");
         });
     },
