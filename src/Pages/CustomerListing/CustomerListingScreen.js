@@ -18,6 +18,10 @@ import "rsuite/dist/rsuite.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./CustomerListing.css";
@@ -178,6 +182,7 @@ const CustomerListing = ({ items }) => {
   return (
     <>
       <CreateNavbar />
+
       <Snackbar
         autoHideDuration={2000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -207,7 +212,7 @@ const CustomerListing = ({ items }) => {
       >
         {/* <Link to="/createCustomer"> */}
         <button onClick={createCustomerBtnHandler} class="btn btn-primary">
-          Add Customer
+          + Add Customer
         </button>
         {/* </Link> */}
       </div>
@@ -218,7 +223,7 @@ const CustomerListing = ({ items }) => {
               <th width="30">SI.NO</th>
               <th width="120">Customer Name</th>
               <th width="100">Customer Email</th>
-              <th width="100">Phone</th>
+              <th width="100">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -233,7 +238,17 @@ const CustomerListing = ({ items }) => {
                 <td>{customer.customerName}</td>
                 <td>{customer.customerEmail}</td>
                 <td>
-                  <Button
+                  <Tooltip placement="top-start" title="Edit">
+                    <IconButton aria-label="delete">
+                      <BorderColorIcon sx={{ color: "blue" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip placement="top-start" title="Delete">
+                    <IconButton aria-label="delete">
+                      <DeleteIcon sx={{ color: "red" }} />
+                    </IconButton>
+                  </Tooltip>
+                  {/* <Button
                     variant="secondary"
                     style={{ height: "40px", width: "80px" }}
                     onClick={() => handleEditButtonClick(customer.customerId)}
@@ -247,7 +262,7 @@ const CustomerListing = ({ items }) => {
                     onClick={() => handleEditButtonClick(customer.customerId)}
                   >
                     Delete
-                  </Button>
+                  </Button> */}
                 </td>
               </tr>
             ))}
@@ -390,7 +405,7 @@ const CustomerListing = ({ items }) => {
                 <Select
                   name="brand"
                   value={formik.values.brand}
-                  onChange = {(e) => formik.setFieldValue("brand",e)}
+                  onChange={(e) => formik.setFieldValue("brand", e)}
                 >
                   <MenuItem value=""></MenuItem>
                   <MenuItem value="nike">Nike</MenuItem>

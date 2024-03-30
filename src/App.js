@@ -35,8 +35,8 @@ function App() {
 
       {/* <Router> */}
       <div className="App">
-      <Sidebar />
-        {loggedIn && <Sidebar />}
+        <Sidebar />
+        {/* {loggedIn && <Sidebar />} */}
         <div className="content">
           <Routes>
             <Route
@@ -49,9 +49,9 @@ function App() {
             <Route path="/ProductListing" element={<ProductListing />} />
             <Route path="/CreateService" element={<CreateService />} />
           </Routes>
+        </div>
+        {/* </Router> */}
       </div>
-      {/* </Router> */}
-    </div>
     </div>
   );
 }

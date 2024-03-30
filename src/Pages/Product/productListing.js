@@ -55,6 +55,7 @@ const ProductListing = ({ items }) => {
   }, []);
 
   const SaveProduct = (values) => {
+    console.log("saveProduct", values);
     setShowPreloader(true);
     fetch("http://localhost:3000/api/v1/products/createProduct", {
       method: "POST",
@@ -118,7 +119,7 @@ const ProductListing = ({ items }) => {
 
   const handleModalSave = () => {
     if (productName.trim() !== "" && productAmount.trim() !== "") {
-      SaveProduct();
+      SaveProduct({ productName: productName, productAmount: productAmount });
     } else {
       setShowError(true);
     }
@@ -131,7 +132,7 @@ const ProductListing = ({ items }) => {
       productAmount !== "" &&
       productAmount !== null
     ) {
-      EditProduct();
+      EditProduct({ productName: productName, productAmount: productAmount });
     } else {
       setShowError(true);
     }
