@@ -121,7 +121,7 @@ export default function CreateCustomerModal({
 
       if (isCustomerEdit) {
         axios
-          .post("http://localhost:3000/api/v1/customers/createCustomer", values)
+          .post(`http://localhost:3000/api/v1/customers/updateCustomerDetailsById?customerId=${currentCustomer.id}`, values)
           .then(() => {
             if (isCustomerEdit) {
               handleCustomerEdit();

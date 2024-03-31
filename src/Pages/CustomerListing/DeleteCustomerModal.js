@@ -34,7 +34,7 @@ export default function DeleteCustomerModal({
     console.log("current customer", currentCustomer);
     axios
       .delete(
-        "http://localhost:3000/api/v1/customers/createCustomer",
+        `http://localhost:3000/api/v1/customers/deleteCustomerById?customerId=${currentCustomer.id}`,
         currentCustomer
       )
       .then(() => {
@@ -43,6 +43,7 @@ export default function DeleteCustomerModal({
         setNotificationSeverity("success");
       })
       .catch((error) => {
+        console.log(error);
         setOpenNotification(true);
         setNotification("An error occurred. Please try again");
         setNotificationSeverity("error");
