@@ -31,23 +31,28 @@ export default function Login({ setAuthDetails }) {
     validationSchema: loginSchema,
     onSubmit: (values) => {
       console.log("values", values);
+      const postData = {
+        username: values?.email,
+        password: values?.password,
+      };
       setAuthDetails({ id: "jbfshb", token: "mhbsdfjhsebgher656844" });
       localStorage.setItem(
         "authToken",
         JSON.stringify({ id: "jbfshb", token: "mhbsdfjhsebgher656844" })
       );
       navigate("/dashboard");
-      //   axios
-      //     .post("http://localhost:3000/api/login", values)
-      //     .then((res) => {
-      //       localStorage.setItem("authToken", JSON.stringify(res.data));
-      //       setAuthDetails(res.data)
-      //       navigate("/dashboard");
-      //     })
-      //     .catch((error) => {
-      //       console.log("error", error);
-      //       setError("Something went wrong. Please try again.");
-      //     });
+      // axios
+      //   .post("http://localhost:3000/login", postData)
+      //   .then((res) => {
+      //     console.log("login success", res);
+      //     localStorage.setItem("authToken", JSON.stringify(res.data));
+      //     setAuthDetails(res.data)
+      //     navigate("/dashboard");
+      //   })
+      //   .catch((error) => {
+      //     console.log("error", error);
+      //     setError("Something went wrong. Please try again.");
+      //   });
     },
     validateOnChange: false,
     enableReinitialize: true,

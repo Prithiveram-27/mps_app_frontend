@@ -10,10 +10,9 @@ import Sidebar from "../components/sidenav";
 
 export default function AppRouter() {
   return (
-    <Grid container>
-      <div className="App">
-        <Sidebar />
-        <div className="content"></div>
+    <div className="App">
+      <Sidebar />
+      <div className="content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -22,6 +21,6 @@ export default function AppRouter() {
           <Route path="/CreateService" element={<CreateService />} />
         </Routes>
       </div>
-    </Grid>
+    </div>
   );
 }

@@ -39,12 +39,13 @@ export default function CreateEditProductModal({
     productName: Yup.string()
       .required("Product name is required.")
       .matches(/^[aA-zZ0-9-\s]+$/, "Please enter a valid Product Name."),
-    productAmount: Yup.number().required("Product Amount is required."),
+    productAmount: Yup.string().required("Product Amount is required."),
   });
 
   let initial = {};
 
   if (isEditMode) {
+    console.log("current product", currentProduct.amount);
     initial = {
       productName: currentProduct?.productname,
       productAmount: currentProduct?.amount,
@@ -100,7 +101,6 @@ export default function CreateEditProductModal({
 
           <Grid item xs={12}>
             <TextField
-              type="number"
               required
               label="Product Amount"
               placeholder="Product Amount"
@@ -108,7 +108,7 @@ export default function CreateEditProductModal({
               containerClass="product-field"
               name="productAmount"
               onChange={formik.handleChange}
-              value={formik.values.amount}
+              value={formik.values.productAmount}
             />
             {formik.errors.productAmount ? (
               <InputLabel
@@ -132,7 +132,7 @@ export default function CreateEditProductModal({
                 type="submit"
                 onClick={() => formik.handleSubmit()}
               >
-                Create
+                {isEditMode ? "Update" : "Create"}
               </Button>
             </Grid>
           </Grid>

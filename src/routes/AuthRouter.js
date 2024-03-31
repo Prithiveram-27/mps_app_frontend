@@ -5,14 +5,14 @@ import Login from "../Pages/Login/Login";
 
 export default function AuthRouter({ setAuthDetails }) {
   return (
-    <Grid container>
+    <div>
       <Routes>
-        <Route path="/" element={<Login setAuthDetails={setAuthDetails} />} />
+        <Route path="/*" element={<Login setAuthDetails={setAuthDetails} />} />
         <Route
           path="/login"
           element={<Login setAuthDetails={setAuthDetails} />}
         />
       </Routes>
-    </Grid>
+    </div>
   );
 }

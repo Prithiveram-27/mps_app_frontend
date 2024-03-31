@@ -1,20 +1,7 @@
 // CustomerListingScreen.js
 import React, { useState, useEffect } from "react";
-import { Container, Table, Button } from "react-bootstrap";
-import {
-  Modal,
-  Box,
-  InputLabel,
-  Typography,
-  Snackbar,
-  Alert,
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { TextField } from "../../components/textField/TextField";
-import { Select } from "../../components/select/Select";
-import { MenuItem } from "../../components/menuItem/MenuItem";
-import { DatePicker } from "rsuite";
-import "rsuite/dist/rsuite.css";
+import { Container, Table } from "react-bootstrap";
+import { Snackbar, Alert } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -22,33 +9,15 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./CustomerListing.css";
 
 import CreateNavbar from "../../components/navbar";
-
-const options = {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "GMT",
-};
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  // border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-  height: 600,
-  overflow: "auto",
-};
+import DeleteCustomerModal from "./DeleteCustomerModal";
+import CreateCustomerModal from "./CreateCustomerModal";
+import ViewCustomerModal from "./ViewCustomerModal";
 
 const currentDate = new Date();
 const futureDate = new Date(
@@ -89,8 +58,6 @@ const CustomerListing = ({ items }) => {
 
   // State to store the fetched data
   const [customerData, setCustomerData] = useState([]);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [showError, setShowError] = useState(false);
 
   const [notification, setNotification] = useState(null);
   const [openNotification, setOpenNotification] = useState(false);
@@ -99,7 +66,11 @@ const CustomerListing = ({ items }) => {
   const [date, setDate] = useState(new Date());
   const [nextServiceDate, setNextServiceDate] = useState(futureDate);
 
+  const [currentCustomer, setCurrentCustomer] = useState(null);
   const [openCreateCustomerModal, setOpenCreateCustomerModal] = useState(false);
+  const [openCustomerDeleteMoal, setOpenCustomerDeleteModal] = useState(false);
+  const [openViewCustomerModal, setOpenViewCustomerModal] = useState(false);
+  const [isCustomerEdit, setIsCustomerEdit] = useState(false);
 
   // Function to fetch data from the API
   const fetchData = async () => {
@@ -111,6 +82,7 @@ const CustomerListing = ({ items }) => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
+      console.log("data", data);
       setCustomerData(data.customers);
     } catch (error) {
       console.error("Error:", error);
@@ -133,10 +105,6 @@ const CustomerListing = ({ items }) => {
     // }
     // return () => clearTimeout(timer);
   }, []);
-
-  const handleEditButtonClick = (productId) => {
-    console.log("Edit button clicked for product ID:", productId);
-  };
 
   const createCustomerBtnHandler = () => {
     setOpenCreateCustomerModal(true);
@@ -183,6 +151,32 @@ const CustomerListing = ({ items }) => {
     <>
       <CreateNavbar />
 
+      {openViewCustomerModal && (
+        <ViewCustomerModal
+          onClose={() => setOpenViewCustomerModal(false)}
+          currentCustomer={currentCustomer}
+        />
+      )}
+
+      {openCustomerDeleteMoal && (
+        <DeleteCustomerModal
+          open={openCustomerDeleteMoal}
+          onClose={() => setOpenCustomerDeleteModal(false)}
+          currentCustomer={currentCustomer}
+          getData={fetchData}
+        />
+      )}
+
+      {openCreateCustomerModal && (
+        <CreateCustomerModal
+          handleCloseAddCustomerModal={() => setOpenCreateCustomerModal(false)}
+          fetchData={fetchData}
+          isCustomerEdit={isCustomerEdit}
+          currentCustomer={currentCustomer}
+          handleCustomerEdit={() => setIsCustomerEdit(false)}
+        />
+      )}
+
       <Snackbar
         autoHideDuration={2000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -222,7 +216,7 @@ const CustomerListing = ({ items }) => {
             <tr>
               <th width="30">SI.NO</th>
               <th width="120">Customer Name</th>
-              <th width="100">Customer Email</th>
+              <th width="100">Customer Address</th>
               <th width="100">Actions</th>
             </tr>
           </thead>
@@ -235,16 +229,40 @@ const CustomerListing = ({ items }) => {
                 key={index}
               >
                 <td>{index + 1}</td>
-                <td>{customer.customerName}</td>
-                <td>{customer.customerEmail}</td>
+                <td>{customer.name}</td>
+                <td>{customer.address}</td>
                 <td>
+                  <Tooltip placement="top-start" title="View">
+                    <IconButton
+                      onClick={() => {
+                        setCurrentCustomer(customer);
+                        setOpenViewCustomerModal(true);
+                      }}
+                      aria-label="view"
+                    >
+                      <VisibilityIcon sx={{ color: "blue" }} />
+                    </IconButton>
+                  </Tooltip>
                   <Tooltip placement="top-start" title="Edit">
-                    <IconButton aria-label="delete">
+                    <IconButton
+                      onClick={() => {
+                        setIsCustomerEdit(true);
+                        setCurrentCustomer(customer);
+                        setOpenCreateCustomerModal(true);
+                      }}
+                      aria-label="delete"
+                    >
                       <BorderColorIcon sx={{ color: "blue" }} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip placement="top-start" title="Delete">
-                    <IconButton aria-label="delete">
+                    <IconButton
+                      onClick={() => {
+                        setOpenCustomerDeleteModal(true);
+                        setCurrentCustomer(customer);
+                      }}
+                      aria-label="delete"
+                    >
                       <DeleteIcon sx={{ color: "red" }} />
                     </IconButton>
                   </Tooltip>
@@ -269,348 +287,6 @@ const CustomerListing = ({ items }) => {
           </tbody>
         </Table>
       </Container>
-
-      {openCreateCustomerModal && (
-        <Modal open onClose={handleCloseAddCustomerModal}>
-          <Box sx={style}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography variant="h5" sx={{ fontWeight: "700" }}>
-                  Create Customer
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="First Name"
-                  placeholder="First Name"
-                  name="firstName"
-                  required
-                  id="customer-first-name"
-                  containerClass="customer-field"
-                  value={formik.values.firstName}
-                  onChange={formik.handleChange}
-                />
-                {formik.errors.firstName ? (
-                  <InputLabel
-                    // className={classes.error}
-                    sx={{ color: "red !important" }}
-                  >
-                    {formik.errors.firstName}
-                  </InputLabel>
-                ) : null}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  name="lastName"
-                  label="Last Name"
-                  placeholder="Last Name"
-                  id="customer-last-name"
-                  containerClass="customer-field"
-                  value={formik.values.lastName}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Mobile Number"
-                  placeholder="Mobile Number"
-                  required
-                  id="customer-mobile-number"
-                  containerClass="customer-field"
-                  name="mobileNumber"
-                  value={formik.values.mobileNumber}
-                  onChange={formik.handleChange}
-                  type="number"
-                />
-                {formik.errors.mobileNumber ? (
-                  <InputLabel sx={{ color: "red !important" }}>
-                    {formik.errors.mobileNumber}
-                  </InputLabel>
-                ) : null}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Alternate Mobile Number"
-                  placeholder="Alternate Mobile Number"
-                  id="customer-alternate-mobile-number"
-                  containerClass="customer-field"
-                  name="alternateMobileNumber"
-                  value={formik.values.alternateMobileNumber}
-                  onChange={formik.handleChange}
-                  type="number"
-                />
-                {formik.errors.alternateMobileNumber ? (
-                  <InputLabel sx={{ color: "red !important" }}>
-                    {formik.errors.alternateMobileNumber}
-                  </InputLabel>
-                ) : null}
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel className="customer-field-label">
-                  Address{" "}
-                  <span style={{ color: "red", marginLeft: "2px" }}>*</span>
-                </InputLabel>
-
-                <textarea
-                  placeholder="Address"
-                  rows="3"
-                  style={{ width: "94%" }}
-                  name="address"
-                  onChange={formik.handleChange}
-                  value={formik.values.address}
-                />
-                {formik.errors.address ? (
-                  <InputLabel
-                    // className={classes.error}
-                    sx={{ color: "red !important" }}
-                  >
-                    {formik.errors.address}
-                  </InputLabel>
-                ) : null}
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel className="customer-field-label">Date</InputLabel>
-
-                <DatePicker
-                  disabled
-                  style={{ width: "94%" }}
-                  // className="customer-field"
-                  character="-"
-                  format="dd-MM-yyyy"
-                  size="md"
-                  placeholder="To Date"
-                  // onChange={(date) => setDate(date)}
-                  // value={date}
-                  renderValue={(date) => {
-                    return `${new Date(formik.values.date).toLocaleDateString(
-                      "en-EN",
-                      options
-                    )}`;
-                  }}
-                  name="date"
-                  value={formik.values.date}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <InputLabel
-                  className="customer-field-label"
-                  id="demo-simple-select-label"
-                >
-                  Brand
-                </InputLabel>
-                <Select
-                  name="brand"
-                  value={formik.values.brand}
-                  onChange={(e) => formik.setFieldValue("brand", e)}
-                >
-                  <MenuItem value=""></MenuItem>
-                  <MenuItem value="nike">Nike</MenuItem>
-                  <MenuItem value="puma">Puma</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  type="number"
-                  required
-                  label="Amount"
-                  placeholder="Amount"
-                  id="customer-amount"
-                  containerClass="customer-field"
-                  name="amount"
-                  onChange={formik.handleChange}
-                  value={formik.values.amount}
-                />
-                {formik.errors.amount ? (
-                  <InputLabel
-                    // className={classes.error}
-                    sx={{ color: "red !important" }}
-                  >
-                    {formik.errors.amount}
-                  </InputLabel>
-                ) : null}
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  label="Remarks"
-                  placeholder="Remarks"
-                  id="customer-remarks"
-                  containerClass="customer-field"
-                  name="remarks"
-                  value={formik.values.remarks}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel
-                  className="customer-field-label"
-                  id="demo-simple-select-label"
-                >
-                  Activity Type
-                </InputLabel>
-                <Select
-                  name="activityType"
-                  value={formik.values.activityType}
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value="sales">Sales</MenuItem>
-                  <MenuItem value="service">Service</MenuItem>
-                  <MenuItem value="amc">AMC</MenuItem>
-                </Select>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <InputLabel
-                  className="customer-field-label"
-                  id="demo-simple-select-label"
-                >
-                  Activity Person
-                </InputLabel>
-                <Select
-                  name="activityPerson"
-                  value={formik.values.activityPerson}
-                  onChange={(e) => formik.setFieldValue("activityPerson", e)}
-                >
-                  <MenuItem value=""></MenuItem>
-                  <MenuItem value="kishore">Kishore</MenuItem>
-                  <MenuItem value="prithive">Prithive</MenuItem>
-                  <MenuItem value="vasanthakumar">Vasanthakumar</MenuItem>
-                  <MenuItem value="saranKumar">Saran Kumar</MenuItem>
-                </Select>
-              </Grid>
-
-              <Grid item xs={12} md={6}>
-                <InputLabel
-                  className="customer-field-label"
-                  id="demo-simple-select-label"
-                >
-                  AMC
-                </InputLabel>
-                <Select
-                  name="amc"
-                  value={formik.values.amc}
-                  onChange={(e) => {
-                    console.log("amc value", e);
-                    formik.setFieldValue("amc", e);
-                    if (e === "enabled") {
-                      formik.setFieldValue("amcStartDate", "");
-                      formik.setFieldValue("amcEndDate", "");
-                      formik.setFieldError("amcStartDate", undefined);
-                      formik.setFieldError("amcEndDate", undefined);
-                    } else {
-                      formik.setFieldValue("amcStartDate", undefined);
-                      formik.setFieldValue("amcEndDate", undefined);
-                      formik.setFieldError("amcStartDate", undefined);
-                      formik.setFieldError("amcEndDate", undefined);
-                    }
-                  }}
-                >
-                  <MenuItem value="enabled">Enabled</MenuItem>
-                  <MenuItem value="disabled">Disabled</MenuItem>
-                </Select>
-              </Grid>
-
-              {formik.values.amc === "enabled" && (
-                <>
-                  <Grid item xs={12} md={6}>
-                    <InputLabel className="customer-field-label">
-                      AMC Start Date
-                    </InputLabel>
-                    <DatePicker
-                      style={{ width: "94%" }}
-                      character="-"
-                      format="dd-MM-yyyy"
-                      size="md"
-                      placeholder="AMC Start Date"
-                      name="amcStartDate"
-                      value={formik.values.amcStartDate}
-                      onChange={(value) =>
-                        formik.setFieldValue("amcStartDate", value)
-                      }
-                      placement="topStart"
-                    />
-                    {formik.errors.amcStartDate ? (
-                      <InputLabel sx={{ color: "red !important" }}>
-                        {formik.errors.amcStartDate}
-                      </InputLabel>
-                    ) : null}
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <InputLabel className="customer-field-label">
-                      AMC End Date
-                    </InputLabel>
-                    <DatePicker
-                      style={{ width: "94%" }}
-                      character="-"
-                      format="dd-MM-yyyy"
-                      size="md"
-                      placeholder="AMC End Date"
-                      name="amcEndDate"
-                      value={formik.values.amcEndDate}
-                      onChange={(value) =>
-                        formik.setFieldValue("amcEndDate", value)
-                      }
-                      placement="topStart"
-                    />
-                    {formik.errors.amcEndDate ? (
-                      <InputLabel sx={{ color: "red !important" }}>
-                        {formik.errors.amcEndDate}
-                      </InputLabel>
-                    ) : null}
-                  </Grid>
-                </>
-              )}
-
-              <Grid item xs={12} md={6}>
-                <InputLabel className="customer-field-label">
-                  Next Service Date
-                </InputLabel>
-                <DatePicker
-                  disabled
-                  // className="customer-field"
-                  style={{ width: "94%" }}
-                  character="-"
-                  format="dd-MM-yyyy"
-                  size="md"
-                  placeholder="To Date"
-                  // onChange={(date) => setNextServiceDate(date)}
-                  // value={nextServiceDate}
-                  renderValue={(date) => {
-                    return `${new Date(
-                      formik.values.nextServiceDate
-                    ).toLocaleDateString("en-EN", options)}`;
-                  }}
-                  name="nextServiceDate"
-                  value={formik.values.nextServiceDate}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={12} container>
-                <Grid item xs={12} md={10} textAlign="end">
-                  <Button
-                    variant="secondary"
-                    onClick={handleCloseAddCustomerModal}
-                  >
-                    Cancel
-                  </Button>
-                </Grid>
-                <Grid item xs={12} md={2} textAlign="end">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    onClick={() => formik.handleSubmit()}
-                  >
-                    Create
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Box>
-        </Modal>
-      )}
     </>
   );
 };

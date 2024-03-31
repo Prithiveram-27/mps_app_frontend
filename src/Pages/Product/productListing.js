@@ -14,12 +14,8 @@ const ProductListing = ({ items }) => {
   // State to store the fetched data
   const [productData, setProductData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [productName, setProductName] = useState("");
-  const [productAmount, setProductAmount] = useState("");
   const [editProductId, setEditProductId] = useState(null);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [showDeleteSuccessMessage, setshowDeleteSuccessMessage] =
-    useState(false);
+  useState(false);
   const [showPreloader, setShowPreloader] = useState(false);
   const [showError, setShowError] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -68,16 +64,22 @@ const ProductListing = ({ items }) => {
       }),
     })
       .then((response) => {
+        setShowPreloader(false);
+
         if (response.ok) {
+          setShowModal(false);
+          fetchData();
+          setOpenNotification(true);
+          setNotification("Product created successfully!");
+          setNotificationSeverity("success");
           console.log("Product saved successfully!");
         } else {
           console.error("Failed to save product");
         }
-        setOpenNotification(true);
-        setNotification("Product created successfully!");
-        setNotificationSeverity("success");
       })
       .catch((error) => {
+        setShowPreloader(false);
+        setShowModal(false);
         console.error("Error:", error);
         setOpenNotification(true);
         setNotification("An error occurred. Please try again");
@@ -101,7 +103,11 @@ const ProductListing = ({ items }) => {
       }
     )
       .then((response) => {
+        setShowPreloader(false);
+        setShowModal(false);
+
         if (response.ok) {
+          fetchData();
           console.log("Product saved successfully!");
           setOpenNotification(true);
           setNotification("Product updated successfully!");
@@ -111,31 +117,12 @@ const ProductListing = ({ items }) => {
         }
       })
       .catch((error) => {
+        setShowPreloader(false);
+        setShowModal(false);
         setOpenNotification(true);
         setNotification("An error occurred. Please try again");
         setNotificationSeverity("error");
       });
-  };
-
-  const handleModalSave = () => {
-    if (productName.trim() !== "" && productAmount.trim() !== "") {
-      SaveProduct({ productName: productName, productAmount: productAmount });
-    } else {
-      setShowError(true);
-    }
-  };
-
-  const handleModalEdit = () => {
-    if (
-      productName !== "" &&
-      productName !== null &&
-      productAmount !== "" &&
-      productAmount !== null
-    ) {
-      EditProduct({ productName: productName, productAmount: productAmount });
-    } else {
-      setShowError(true);
-    }
   };
 
   const handleEditButtonClick = (productId) => {
@@ -144,8 +131,6 @@ const ProductListing = ({ items }) => {
     );
     if (productToEdit) {
       setEditProductId(productId);
-      setProductName(productToEdit.productname);
-      setProductAmount(productToEdit.amount);
       setIsEditMode(true); // Set edit mode
       setShowModal(true);
       setCurrentProduct(productToEdit);
@@ -164,7 +149,9 @@ const ProductListing = ({ items }) => {
       }
     )
       .then((response) => {
+        setShowPreloader(false);
         if (response.ok) {
+          fetchData();
           console.log("Product deleted successfully!");
           setOpenNotification(true);
           setNotification("Product deleted successfully!");
@@ -174,6 +161,7 @@ const ProductListing = ({ items }) => {
         }
       })
       .catch((error) => {
+        setShowPreloader(false);
         setOpenNotification(true);
         setNotification("An error occurred. Please try again");
         setNotificationSeverity("error");
@@ -182,14 +170,11 @@ const ProductListing = ({ items }) => {
 
   const handleAddProductButtonClick = () => {
     setIsEditMode(false);
-    setProductAmount("");
-    setProductName("");
     setShowModal(true); // Show the modal
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setShowSuccessMessage(false);
     setShowError(false);
     // window.location.reload();
   };
@@ -275,7 +260,7 @@ const ProductListing = ({ items }) => {
         }}
       >
         <Button className="button-mps" onClick={handleAddProductButtonClick}>
-          Add Product
+          + Add Product
         </Button>
       </div>
       <Container>
@@ -294,25 +279,8 @@ const ProductListing = ({ items }) => {
           pagination={paginationFactory({ ...paginationOptions, sizePerPage })}
           wrapperClasses="table-responsive" // To make the table scrollable
         />
-        {showDeleteSuccessMessage && (
-          <Alert
-            variant="success"
-            className="mt-3"
-            style={{
-              position: "fixed",
-              top: 0,
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 9999,
-              width: "50%",
-              textAlign: "center",
-            }}
-          >
-            Product Deleted successfully!
-          </Alert>
-        )}
       </Container>
-      {showModal && (
+      {/* {showModal && (
         <Modal show onHide={handleCloseModal}>
           <Modal.Header
             className="Modal-header"
@@ -389,9 +357,9 @@ const ProductListing = ({ items }) => {
             </Button>
           </Modal.Footer>
         </Modal>
-      )}
+      )} */}
 
-      {/* {showModal && (
+      {showModal && (
         <CreateEditProductModal
           handleCloseModal={handleCloseModal}
           isEditMode={isEditMode}
@@ -399,7 +367,7 @@ const ProductListing = ({ items }) => {
           currentProduct={currentProduct}
           editProduct={EditProduct}
         />
-      )} */}
+      )}
     </>
   );
 };

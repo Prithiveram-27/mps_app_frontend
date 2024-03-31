@@ -27,16 +27,14 @@ function App() {
 
   return (
     <div>
-      {/* {authDetails === null ? (
+      {authDetails === null ? (
         <AuthRouter setAuthDetails={setAuthDetails} />
       ) : (
         <AppRouter />
-      )} */}
+      )}
 
-      {/* <Router> */}
-      <div className="App">
+      {/* <div className="App">
         <Sidebar />
-        {/* {loggedIn && <Sidebar />} */}
         <div className="content">
           <Routes>
             <Route
@@ -50,8 +48,7 @@ function App() {
             <Route path="/CreateService" element={<CreateService />} />
           </Routes>
         </div>
-        {/* </Router> */}
-      </div>
+      </div> */}
     </div>
   );
 }
