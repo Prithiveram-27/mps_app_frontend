@@ -1,9 +1,7 @@
 // CustomerListingScreen.js
 import React, { useState, useEffect } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { Snackbar, Alert } from "@mui/material";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -18,44 +16,9 @@ import CreateNavbar from "../../components/navbar";
 import DeleteCustomerModal from "./DeleteCustomerModal";
 import CreateCustomerModal from "./CreateCustomerModal";
 import ViewCustomerModal from "./ViewCustomerModal";
+import { TextField } from "../../components/textField/TextField";
 
-const currentDate = new Date();
-const futureDate = new Date(
-  currentDate.getFullYear(),
-  currentDate.getMonth() + 4,
-  currentDate.getDate()
-);
 const CustomerListing = ({ items }) => {
-  const createCustomerSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .required("First name is required.")
-      .matches(/^[aA-zZ0-9-\s]+$/, "Please enter a valid First Name."),
-    amount: Yup.number().required("Amount is required."),
-    address: Yup.string().required("Address is required."),
-    mobileNumber: Yup.string()
-      .min(10, "Please enter a valid Mobile Number.")
-      .max(10, "Please enter a valid Mobile Number.")
-      .required("Mobile Number is required."),
-    alternateMobileNumber: Yup.string()
-      .min(10, "Please enter a valid Mobile Number.")
-      .max(10, "Please enter a valid Mobile Number."),
-    amc: Yup.string(),
-    amcStartDate: Yup.date().test({
-      name: "amc-start-date",
-      test: function (value) {
-        return this.parent.amc === "enabled" ? !!value : true;
-      },
-      message: "AMC start date is required.",
-    }),
-    amcEndDate: Yup.date().test({
-      name: "amc-end-date",
-      test: function (value) {
-        return this.parent.amc === "enabled" ? !!value : true;
-      },
-      message: "AMC end date is required.",
-    }),
-  });
-
   // State to store the fetched data
   const [customerData, setCustomerData] = useState([]);
 
@@ -63,14 +26,12 @@ const CustomerListing = ({ items }) => {
   const [openNotification, setOpenNotification] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState("");
 
-  const [date, setDate] = useState(new Date());
-  const [nextServiceDate, setNextServiceDate] = useState(futureDate);
-
   const [currentCustomer, setCurrentCustomer] = useState(null);
   const [openCreateCustomerModal, setOpenCreateCustomerModal] = useState(false);
   const [openCustomerDeleteMoal, setOpenCustomerDeleteModal] = useState(false);
   const [openViewCustomerModal, setOpenViewCustomerModal] = useState(false);
   const [isCustomerEdit, setIsCustomerEdit] = useState(false);
+  const [searchValue, setSearchValue] = useState(null);
 
   // Function to fetch data from the API
   const fetchData = async () => {
@@ -82,7 +43,6 @@ const CustomerListing = ({ items }) => {
         throw new Error("Failed to fetch data");
       }
       const data = await response.json();
-      console.log("data", data);
       setCustomerData(data.customers);
     } catch (error) {
       console.error("Error:", error);
@@ -110,42 +70,20 @@ const CustomerListing = ({ items }) => {
     setOpenCreateCustomerModal(true);
   };
 
-  const handleCloseAddCustomerModal = () => {
-    formik.resetForm();
-    setOpenCreateCustomerModal(false);
-  };
-
-  const initial = {
-    date: date,
-    activityType: "sales",
-    nextServiceDate: nextServiceDate,
-    amc: "disabled",
-  };
-
-  const formik = useFormik({
-    initialValues: { ...initial },
-    validationSchema: createCustomerSchema,
-    onSubmit: (values) => {
-      values.name = `${values?.firstName} ${values?.lastName || ""}`;
-      console.log("values", values);
-      axios
-        .post("http://localhost:3000/api/v1/customers/createCustomer", values)
-        .then(() => {
-          handleCloseAddCustomerModal();
-          setOpenNotification(true);
-          setNotification("Customer created successfully!");
-          setNotificationSeverity("success");
-          fetchData();
-        })
-        .catch((error) => {
-          setOpenNotification(true);
-          setNotification(`${error.response.data.error}`);
-          setNotificationSeverity("error");
-        });
-    },
-    validateOnChange: false,
-    enableReinitialize: true,
-  });
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:3000/api/v1/customers/getCustomersbyNameorMobilenumber/?searchTerm=${searchValue}`
+      )
+      .then((res) => {
+        setCustomerData(res?.data?.customers);
+      })
+      .catch((err) => {
+        setOpenNotification(true);
+        setNotification("An error occurred. Please try again");
+        setNotificationSeverity("error");
+      });
+  }, [searchValue]);
 
   return (
     <>
@@ -199,23 +137,31 @@ const CustomerListing = ({ items }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "10px",
+          justifyContent: "space-between",
           marginRight: "10px",
+          paddingLeft: "2%",
+          paddingRight: "2%",
         }}
       >
+        <TextField
+          placeholder="Search by name,mobile number"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
         {/* <Link to="/createCustomer"> */}
         <button onClick={createCustomerBtnHandler} class="btn btn-primary">
           + Add Customer
         </button>
         {/* </Link> */}
       </div>
-      <Container>
+      {/* <Container> */}
+      <div style={{ padding: "2%" }}>
         <Table table-striped bordered hover className="custom-table">
           <thead>
             <tr>
               <th width="30">SI.NO</th>
               <th width="120">Customer Name</th>
+              <th width="100">Mobile Number</th>
               <th width="100">Customer Address</th>
               <th width="100">Actions</th>
             </tr>
@@ -230,6 +176,7 @@ const CustomerListing = ({ items }) => {
               >
                 <td>{index + 1}</td>
                 <td>{customer.name}</td>
+                <td>{customer.mobilenumber}</td>
                 <td>{customer.address}</td>
                 <td>
                   <Tooltip placement="top-start" title="View">
@@ -286,7 +233,8 @@ const CustomerListing = ({ items }) => {
             ))}
           </tbody>
         </Table>
-      </Container>
+      </div>
+      {/* </Container> */}
     </>
   );
 };

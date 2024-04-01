@@ -121,7 +121,10 @@ export default function CreateCustomerModal({
 
       if (isCustomerEdit) {
         axios
-          .post(`http://localhost:3000/api/v1/customers/updateCustomerDetailsById?customerId=${currentCustomer.id}`, values)
+          .post(
+            `http://localhost:3000/api/v1/customers/updateCustomerDetailsById?customerId=${currentCustomer.id}`,
+            values
+          )
           .then(() => {
             if (isCustomerEdit) {
               handleCustomerEdit();
@@ -129,8 +132,11 @@ export default function CreateCustomerModal({
             setOpenNotification(true);
             setNotification("Customer edited successfully!");
             setNotificationSeverity("success");
-            fetchData();
-            handleCloseAddCustomerModal();
+            setTimeout(() => {
+              fetchData();
+              formik.resetForm();
+              handleCloseAddCustomerModal();
+            }, 500);
           })
           .catch((error) => {
             setOpenNotification(true);
@@ -147,8 +153,11 @@ export default function CreateCustomerModal({
             setOpenNotification(true);
             setNotification("Customer created successfully!");
             setNotificationSeverity("success");
-            fetchData();
-            handleCloseAddCustomerModal();
+            setTimeout(() => {
+              fetchData();
+              formik.resetForm();
+              handleCloseAddCustomerModal();
+            }, 500);
           })
           .catch((error) => {
             setOpenNotification(true);
@@ -180,12 +189,18 @@ export default function CreateCustomerModal({
           {notification}
         </Alert>
       </Snackbar>
-      <Modal open onClose={handleCloseAddCustomerModal}>
+      <Modal
+        open
+        onClose={() => {
+          formik.resetForm();
+          handleCloseAddCustomerModal();
+        }}
+      >
         <Box sx={style}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h5" sx={{ fontWeight: "700" }}>
-                Create Customer
+                {isCustomerEdit ? "Edit" : "Create"} Customer
               </Typography>
             </Grid>
 
@@ -501,7 +516,10 @@ export default function CreateCustomerModal({
               <Grid item xs={12} md={10} textAlign="end">
                 <Button
                   variant="secondary"
-                  onClick={handleCloseAddCustomerModal}
+                  onClick={() => {
+                    formik.resetForm();
+                    handleCloseAddCustomerModal();
+                  }}
                 >
                   Cancel
                 </Button>
@@ -512,7 +530,7 @@ export default function CreateCustomerModal({
                   type="submit"
                   onClick={() => formik.handleSubmit()}
                 >
-                  Create
+                  {isCustomerEdit ? "Update" : "Create"}
                 </Button>
               </Grid>
             </Grid>
