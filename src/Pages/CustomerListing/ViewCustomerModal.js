@@ -80,7 +80,9 @@ export default function ViewCustomerModal({ onClose, currentCustomer }) {
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography className="customer-view-header">AMC</Typography>
-            <Typography>{currentCustomer?.isamcenabled || "-"}</Typography>
+            <Typography>
+            {(currentCustomer?.isamcenabled ? "Enabled" : "Disabled")}
+            </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography className="customer-view-header">
