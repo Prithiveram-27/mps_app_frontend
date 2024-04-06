@@ -41,12 +41,18 @@ export default function DeleteCustomerModal({
         setOpenNotification(true);
         setNotification("Customer deleted successfully!");
         setNotificationSeverity("success");
+        setTimeout(() => {
+          onClose();
+        }, 500);
       })
       .catch((error) => {
         console.log(error);
         setOpenNotification(true);
         setNotification("An error occurred. Please try again");
         setNotificationSeverity("error");
+        setTimeout(() => {
+          onClose();
+        }, 500);
       });
   };
 
