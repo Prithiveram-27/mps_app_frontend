@@ -96,9 +96,9 @@ const CreateService = () => {
 
   const getListOfServices = () => {
     axios
-      .post("http://localhost:3000/api/v1/products/getAllServices")
+      .get("http://localhost:3000/api/v1/service/getAllservices")
       .then((res) => {
-        setServicesData(res?.data);
+        setServicesData(res?.data.service);
       })
       .catch((error) => {
         setOpenNotification(true);
