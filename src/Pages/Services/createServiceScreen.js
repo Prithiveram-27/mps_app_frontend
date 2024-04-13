@@ -8,12 +8,18 @@ import {
   Container,
   Table,
 } from "react-bootstrap";
+import DeleteIcon from "@mui/icons-material/Delete";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import "./createServiceScreen.css";
 import CreateNavbar from "../../components/navbar";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Tooltip, IconButton } from "@mui/material";
 import axios from "axios";
 import CreateServiceModal from "./CreateServiceModal";
+import DeleteServiceModal from "./DeleteServiceModal";
+import ViewServiceModal from "./ViewServiceModal";
+import EditServiceModal from "./EditServiceModal";
 
 const CreateService = () => {
   const [formData, setFormData] = useState({
@@ -28,77 +34,23 @@ const CreateService = () => {
   });
   const [showPreloader, setShowPreloader] = useState(false);
 
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedName, setSelectedName] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [redirectToAnotherScreen, setRedirectToAnotherScreen] = useState(false);
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
   const [notification, setNotification] = useState(null);
   const [openNotification, setOpenNotification] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState("");
   const [openAddServiceModal, setOpenAddServiceModal] = useState(false);
   const [servicesData, setServicesData] = useState([]);
-
-  const handleNameSearch = async (searchText) => {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/v1/customers/getCustomersbyNameorMobilenumber?searchTerm=${searchText}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setSearchResults(data.customers);
-        setIsDropdownVisible(true);
-      } else {
-        console.error("Failed to fetch search results.");
-      }
-    } catch (error) {
-      console.error("Error searching names:", error);
-    }
-  };
-
-  // Function to handle name selection
-  const handleNameSelect = (name) => {
-    setSelectedName(name);
-    setIsDropdownVisible(false);
-    const selectedResult = searchResults.find((result) => result.name === name);
-    if (selectedResult) {
-      setFormData({
-        ...formData,
-        phoneNumber: selectedResult.mobilenumber,
-        alternateNumber: selectedResult.alternatemobilenumber,
-        address: selectedResult.address,
-      });
-    }
-  };
-
-  const handleFormSubmit = async () => {
-    try {
-      const response = await fetch("YOUR_API_ENDPOINT", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setSuccessMessage("Service created successfully.");
-        setRedirectToAnotherScreen(true);
-      } else {
-        // Handle API call failure
-        console.error("Failed to create service.");
-      }
-    } catch (error) {
-      console.error("Error creating service:", error);
-    }
-  };
+  const [currentService, setCurrentService] = useState(null);
+  const [openDeleteServiceModal, setOpenDeleteServiceModal] = useState(false);
+  const [openViewServiceModal, setOpenViewServiceModal] = useState(false);
+  const [openEditServiceModal, setOpenEditServiceModal] = useState(false);
 
   const getListOfServices = () => {
     axios
       .get("http://localhost:3000/api/v1/service/getAllservices")
       .then((res) => {
-        setServicesData(res?.data.service);
+        setServicesData(res?.data?.data);
       })
       .catch((error) => {
         setOpenNotification(true);
@@ -123,6 +75,32 @@ const CreateService = () => {
         <CreateServiceModal
           handleCloseAddServiceModal={() => setOpenAddServiceModal(false)}
           fetchData={fetchData}
+          setNotification={setNotification}
+          setNotificationSeverity={setNotificationSeverity}
+          setOpenNotification={setOpenNotification}
+        />
+      )}
+
+      {openDeleteServiceModal && (
+        <DeleteServiceModal
+          currentService={currentService}
+          getData={fetchData}
+          onClose={() => setOpenDeleteServiceModal(false)}
+        />
+      )}
+
+      {openViewServiceModal && (
+        <ViewServiceModal
+          currentService={currentService}
+          onClose={() => setOpenViewServiceModal(false)}
+        />
+      )}
+
+      {openEditServiceModal && (
+        <EditServiceModal
+          currentService={currentService}
+          getData={fetchData}
+          onClose={() => setOpenEditServiceModal(false)}
           setNotification={setNotification}
           setNotificationSeverity={setNotificationSeverity}
           setOpenNotification={setOpenNotification}
@@ -174,11 +152,63 @@ const CreateService = () => {
             <tr>
               <th width="30">SI.NO</th>
               <th width="120">Customer Name</th>
-              <th width="100">Mobile Number</th>
+              <th width="100">Service Person</th>
               <th width="100">Problem Type</th>
-              <th width="100">Problem Status</th>
+              <th width="100">Product Status</th>
+              <th width="100">Actions</th>
             </tr>
           </thead>
+          <tbody>
+            {servicesData?.map((service, index) => (
+              <tr
+                className={`table_font_color ${
+                  index % 2 === 0 ? "table-striped" : ""
+                }`}
+                key={index}
+              >
+                <td>{index + 1}</td>
+                <td>{service.customer.name}</td>
+                <td>{service.service.serviceperson}</td>
+                <td>{service.service.problemtype}</td>
+                <td>{service.service.productstatus}</td>
+                <td>
+                  <Tooltip placement="top-start" title="View">
+                    <IconButton
+                      onClick={() => {
+                        setCurrentService(service);
+                        setOpenViewServiceModal(true);
+                      }}
+                      aria-label="view"
+                    >
+                      <VisibilityIcon sx={{ color: "blue" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip placement="top-start" title="Edit">
+                    <IconButton
+                      onClick={() => {
+                        setCurrentService(service);
+                        setOpenEditServiceModal(true);
+                      }}
+                      aria-label="edit"
+                    >
+                      <BorderColorIcon sx={{ color: "blue" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip placement="top-start" title="Delete">
+                    <IconButton
+                      onClick={() => {
+                        setCurrentService(JSON.stringify(service));
+                        setOpenDeleteServiceModal(true);
+                      }}
+                      aria-label="delete"
+                    >
+                      <DeleteIcon sx={{ color: "red" }} />
+                    </IconButton>
+                  </Tooltip>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </Table>
       </div>
       {/* <div className="d-flex justify-content-center mt-5">
