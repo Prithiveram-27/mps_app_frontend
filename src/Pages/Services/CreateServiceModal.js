@@ -73,13 +73,17 @@ export default function CreateServiceModal({
   });
 
   const [customers, setCustomers] = useState([]);
-  const [currentCustomerData, setCurrentCustomerData] = useState({ name: "" });
+  const [currentCustomerData, setCurrentCustomerData] = useState({
+    name: "",
+    date: new Date(),
+  });
 
   let initial = {
     name: currentCustomerData?.name || "",
     mobileNumber: currentCustomerData?.mobilenumber || "",
     alternateMobileNumber: currentCustomerData?.alternatemobilenumber || "",
     address: currentCustomerData?.address || "",
+    date: currentCustomerData?.date || "",
     productBrand: "",
     problemType: "",
     problemStatus: "",
@@ -94,25 +98,96 @@ export default function CreateServiceModal({
       console.log("values", values);
 
       axios
-        .post("http://localhost:3000/api/v1/service/", values)
-        .then(() => {
-          handleCloseAddServiceModal();
-          setNotification("Service Created Successfully!");
-          setNotificationSeverity("success");
-          setOpenNotification(true);
-          fetchData();
-          formik.resetForm();
+        .get(
+          `http://localhost:3000/api/v1/customers/getCustomersbyNameorMobilenumber/?searchTerm=${values?.mobileNumber}`
+        )
+        .then((res) => {
+          //  setCustomerData(res?.data?.customers);
+          console.log("customer search res", res?.data?.customers);
+          const isCustomerPresent =
+            res?.data?.customers?.length > 0 ? true : false;
+          console.log("is customer present", isCustomerPresent);
+
+          if (isCustomerPresent) {
+            createServiceHandler(values);
+          } else {
+            createCustomerHandler(values);
+          }
         })
         .catch((err) => {
-          handleCloseAddServiceModal();
-          setNotification("An error occurred. Please try again.");
-          setNotificationSeverity("error");
           setOpenNotification(true);
+          setNotification("An error occurred. Please try again");
+          setNotificationSeverity("error");
         });
+
+      // axios
+      //   .post("http://localhost:3000/api/v1/service/", values)
+      //   .then(() => {
+      //     handleCloseAddServiceModal();
+      //     setNotification("Service Created Successfully!");
+      //     setNotificationSeverity("success");
+      //     setOpenNotification(true);
+      //     fetchData();
+      //     formik.resetForm();
+      //   })
+      //   .catch((err) => {
+      //     handleCloseAddServiceModal();
+      //     setNotification("An error occurred. Please try again.");
+      //     setNotificationSeverity("error");
+      //     setOpenNotification(true);
+      //   });
     },
     validateOnChange: false,
     enableReinitialize: true,
   });
+
+  const createServiceHandler = (values) => {
+    axios
+      .post("http://localhost:3000/api/v1/service/", values)
+      .then(() => {
+        handleCloseAddServiceModal();
+        setNotification("Service Created Successfully!");
+        setNotificationSeverity("success");
+        setOpenNotification(true);
+        fetchData();
+        formik.resetForm();
+      })
+      .catch((err) => {
+        handleCloseAddServiceModal();
+        setNotification("An error occurred. Please try again.");
+        setNotificationSeverity("error");
+        setOpenNotification(true);
+      });
+  };
+
+  const createCustomerHandler = (values) => {
+    const currentDate = new Date();
+    const futureDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 4,
+      currentDate.getDate()
+    );
+    let postData = { ...values };
+    // postData.amcStartDate = null;
+    // postData.amcEndDate = null;
+    postData.nextServiceDate = futureDate;
+    postData.amc = "disabled";
+    postData.activityType = "sales";
+    postData.brand = values?.productBrand;
+    postData.amount = "0";
+    console.log("Create Customer postdata", postData);
+
+    axios
+      .post("http://localhost:3000/api/v1/customers/createCustomer", postData)
+      .then(() => {
+        createServiceHandler(values);
+      })
+      .catch((error) => {
+        setOpenNotification(true);
+        setNotification(`${error.response.data.error}`);
+        setNotificationSeverity("error");
+      });
+  };
 
   useEffect(() => {
     axios
