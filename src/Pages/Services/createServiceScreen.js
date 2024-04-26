@@ -66,7 +66,9 @@ const CreateService = () => {
     getListOfServices();
   }, [redirectToAnotherScreen]);
 
-  const fetchData = () => {};
+  const fetchData = () => {
+    getListOfServices();
+  };
 
   return (
     <>
@@ -74,7 +76,7 @@ const CreateService = () => {
       {openAddServiceModal && (
         <CreateServiceModal
           handleCloseAddServiceModal={() => setOpenAddServiceModal(false)}
-          fetchData={fetchData}
+          fetchData={getListOfServices}
           setNotification={setNotification}
           setNotificationSeverity={setNotificationSeverity}
           setOpenNotification={setOpenNotification}

@@ -145,11 +145,11 @@ export default function CreateServiceModal({
     axios
       .post("http://localhost:3000/api/v1/service/", values)
       .then(() => {
+        fetchData();
         handleCloseAddServiceModal();
         setNotification("Service Created Successfully!");
         setNotificationSeverity("success");
         setOpenNotification(true);
-        fetchData();
         formik.resetForm();
       })
       .catch((err) => {
@@ -179,7 +179,9 @@ export default function CreateServiceModal({
 
     axios
       .post("http://localhost:3000/api/v1/customers/createCustomer", postData)
-      .then(() => {
+      .then((res) => {
+        console.log("create customer response", res);
+        values.id = res?.data?.customerId;
         createServiceHandler(values);
       })
       .catch((error) => {
