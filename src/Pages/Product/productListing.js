@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Button, Modal, Form, Row, Col } from "react-bootstrap";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Typography } from "@mui/material";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import "bootstrap/dist/css/bootstrap.css";
@@ -254,14 +254,31 @@ const ProductListing = ({ items }) => {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          // justifyContent: "flex-end",
           marginBottom: "10px",
           marginRight: "10px",
         }}
       >
-        <Button className="button-mps" onClick={handleAddProductButtonClick}>
-          + Add Product
-        </Button>
+        <div
+          style={{
+            marginRight: "10px",
+            paddingLeft: "2%",
+            paddingRight: "2%",
+            marginBottom: "2%",
+            width: "50%",
+          }}
+        >
+          <Typography
+            sx={{ fontWeight: "700", fontSize: "24px", color: "black" }}
+          >
+            Products
+          </Typography>
+        </div>
+        <div style={{ width: "50%", textAlign: "end" }}>
+          <Button className="button-mps" onClick={handleAddProductButtonClick}>
+            + Add Product
+          </Button>
+        </div>
       </div>
       <Container>
         {showPreloader && (
@@ -269,16 +286,21 @@ const ProductListing = ({ items }) => {
             <div className="preloader"></div>
           </div>
         )}
-        <BootstrapTable
-          keyField="product_id"
-          data={productData}
-          columns={columns}
-          striped
-          hover
-          bootstrap4
-          pagination={paginationFactory({ ...paginationOptions, sizePerPage })}
-          wrapperClasses="table-responsive" // To make the table scrollable
-        />
+        <div style={{ padding: "2%" }}>
+          <BootstrapTable
+            keyField="product_id"
+            data={productData}
+            columns={columns}
+            striped
+            hover
+            bootstrap4
+            pagination={paginationFactory({
+              ...paginationOptions,
+              sizePerPage,
+            })}
+            wrapperClasses="table-responsive" // To make the table scrollable
+          />
+        </div>
       </Container>
       {/* {showModal && (
         <Modal show onHide={handleCloseModal}>

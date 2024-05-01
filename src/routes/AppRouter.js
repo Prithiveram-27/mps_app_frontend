@@ -5,7 +5,7 @@ import Login from "../Pages/Login/Login";
 import Dashboard from "../Pages/Dashboard/dashboardScreen";
 import CustomerListing from "../Pages/CustomerListing/CustomerListingScreen";
 import ProductListing from "../Pages/Product/productListing";
-import CreateService from "../Pages/Services/createServiceScreen";
+import CreateService from "../Pages/Services/listServiceScreen";
 import Sidebar from "../components/sidenav";
 
 export default function AppRouter() {

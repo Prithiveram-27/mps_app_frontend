@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "./Pages/Dashboard/dashboardScreen";
-import CustomerListing from "./Pages/CustomerListing/CustomerListingScreen";
-import ProductListing from "./Pages/Product/productListing";
-import Sidebar from "./components/sidenav";
-import CreateService from "./Pages/Services/createServiceScreen";
 import "./App.css";
-import Login from "./Pages/Login/Login";
 import AuthRouter from "./routes/AuthRouter";
 import AppRouter from "./routes/AppRouter";
 

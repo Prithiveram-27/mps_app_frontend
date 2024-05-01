@@ -78,6 +78,22 @@ export default function CreateServiceModal({
     date: new Date(),
   });
 
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v1/products/getAllProducts")
+      .then((res) => {
+        console.log("get all products res", res?.data);
+        setProducts(res.data?.products);
+      })
+      .catch((err) => {
+        setOpenNotification(true);
+        setNotification(`${err.response.data.error}`);
+        setNotificationSeverity("error");
+      });
+  }, []);
+
   let initial = {
     name: currentCustomerData?.name || "",
     mobileNumber: currentCustomerData?.mobilenumber || "",
@@ -352,15 +368,43 @@ export default function CreateServiceModal({
             >
               Brand <span style={{ color: "red" }}>*</span>
             </InputLabel>
-            <Select
+            <FormControl fullWidth>
+              <MuiSelect
+                size="small"
+                fullWidth
+                name="productBrand"
+                value={formik.values.productBrand}
+                onChange={formik.handleChange}
+              >
+                {products?.map((product) => {
+                  return (
+                    <MuiMenuItem
+                      value={product?.productname}
+                      key={product?.productname}
+                    >
+                      {product?.productname}
+                    </MuiMenuItem>
+                  );
+                })}
+              </MuiSelect>
+            </FormControl>
+            {/* <Select
               name="productBrand"
               value={formik.values.productBrand}
               onChange={(e) => formik.setFieldValue("productBrand", e)}
             >
               <MenuItem value=""></MenuItem>
-              <MenuItem value="nike">Nike</MenuItem>
-              <MenuItem value="puma">Puma</MenuItem>
-            </Select>
+              {products?.map((product) => {
+                return (
+                  <MenuItem
+                    value={product?.productname}
+                    key={product?.productname}
+                  >
+                    {product?.productname}
+                  </MenuItem>
+                );
+              })}
+            </Select> */}
             {formik.errors.productBrand ? (
               <InputLabel sx={{ color: "red !important" }}>
                 {formik.errors.productBrand}

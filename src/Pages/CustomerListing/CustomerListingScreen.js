@@ -1,7 +1,7 @@
 // CustomerListingScreen.js
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Typography } from "@mui/material";
 import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -134,6 +134,20 @@ const CustomerListing = ({ items }) => {
         </Alert>
       </Snackbar>
       <br />
+      <div
+        style={{
+          marginRight: "10px",
+          paddingLeft: "2%",
+          paddingRight: "2%",
+          marginBottom: "2%",
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: "700", fontSize: "24px", color: "black" }}
+        >
+          Customers
+        </Typography>
+      </div>
       <div
         style={{
           display: "flex",

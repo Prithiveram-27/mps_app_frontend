@@ -14,7 +14,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import "./createServiceScreen.css";
 import CreateNavbar from "../../components/navbar";
-import { Snackbar, Alert, Tooltip, IconButton } from "@mui/material";
+import {
+  Snackbar,
+  Alert,
+  Tooltip,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import CreateServiceModal from "./CreateServiceModal";
 import DeleteServiceModal from "./DeleteServiceModal";
@@ -131,17 +137,34 @@ const CreateService = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          // justifyContent: "flex-end",
           marginBottom: "10px",
           marginRight: "10px",
         }}
       >
-        <Button
-          className="button-mps"
-          onClick={() => setOpenAddServiceModal(true)}
+        <div
+          style={{
+            marginRight: "10px",
+            paddingLeft: "2%",
+            paddingRight: "2%",
+            marginBottom: "2%",
+            width: "50%",
+          }}
         >
-          + Add Service
-        </Button>
+          <Typography
+            sx={{ fontWeight: "700", fontSize: "24px", color: "black" }}
+          >
+            Services
+          </Typography>
+        </div>
+        <div style={{ width: "50%", textAlign: "end" }}>
+          <Button
+            className="button-mps"
+            onClick={() => setOpenAddServiceModal(true)}
+          >
+            + Add Service
+          </Button>
+        </div>
       </div>
       {showPreloader && (
         <div className="preloader-container">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import {
   Modal,
@@ -7,6 +7,8 @@ import {
   Typography,
   Snackbar,
   Alert,
+  Select as MuiSelect,
+  MenuItem as MuiMenuItem,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { TextField } from "../../components/textField/TextField";
@@ -17,6 +19,7 @@ import "rsuite/dist/rsuite.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import FormControl from "@mui/material/FormControl";
 
 const options = {
   month: "short",
@@ -56,6 +59,22 @@ export default function CreateCustomerModal({
   const [notification, setNotification] = useState(null);
   const [openNotification, setOpenNotification] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState("");
+
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v1/products/getAllProducts")
+      .then((res) => {
+        console.log("get all products res", res?.data);
+        setProducts(res.data?.products);
+      })
+      .catch((err) => {
+        setOpenNotification(true);
+        setNotification(`${err.response.data.error}`);
+        setNotificationSeverity("error");
+      });
+  }, []);
 
   const createCustomerSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -169,6 +188,7 @@ export default function CreateCustomerModal({
     validateOnChange: false,
     enableReinitialize: true,
   });
+
   return (
     <>
       <Snackbar
@@ -326,15 +346,26 @@ export default function CreateCustomerModal({
               >
                 Brand
               </InputLabel>
-              <Select
-                name="brand"
-                value={formik.values.brand}
-                onChange={(e) => formik.setFieldValue("brand", e)}
-              >
-                <MenuItem value=""></MenuItem>
-                <MenuItem value="nike">Nike</MenuItem>
-                <MenuItem value="puma">Puma</MenuItem>
-              </Select>
+              <FormControl fullWidth>
+                <MuiSelect
+                  size="small"
+                  fullWidth
+                  name="brand"
+                  value={formik.values.brand}
+                  onChange={formik.handleChange}
+                >
+                  {products?.map((product) => {
+                    return (
+                      <MuiMenuItem
+                        value={product?.productname}
+                        key={product?.productname}
+                      >
+                        {product?.productname}
+                      </MuiMenuItem>
+                    );
+                  })}
+                </MuiSelect>
+              </FormControl>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -376,7 +407,26 @@ export default function CreateCustomerModal({
               >
                 Activity Type
               </InputLabel>
-              <Select
+              <FormControl fullWidth>
+                <MuiSelect
+                  size="small"
+                  fullWidth
+                  name="activityType"
+                  value={formik.values.activityType}
+                  onChange={formik.handleChange}
+                >
+                  <MuiMenuItem key="sales" value="sales">
+                    Sales
+                  </MuiMenuItem>
+                  <MuiMenuItem key="service" value="service">
+                    Service
+                  </MuiMenuItem>
+                  <MuiMenuItem key="amc" value="amc">
+                    AMC
+                  </MuiMenuItem>
+                </MuiSelect>
+              </FormControl>
+              {/* <Select
                 name="activityType"
                 value={formik.values.activityType}
                 onChange={formik.handleChange}
@@ -384,7 +434,7 @@ export default function CreateCustomerModal({
                 <MenuItem value="sales">Sales</MenuItem>
                 <MenuItem value="service">Service</MenuItem>
                 <MenuItem value="amc">AMC</MenuItem>
-              </Select>
+              </Select> */}
             </Grid>
             <Grid item xs={12} md={6}>
               <InputLabel
@@ -393,7 +443,29 @@ export default function CreateCustomerModal({
               >
                 Activity Person
               </InputLabel>
-              <Select
+              <FormControl fullWidth>
+                <MuiSelect
+                  size="small"
+                  fullWidth
+                  name="brand"
+                  value={formik.values.brand}
+                  onChange={formik.handleChange}
+                >
+                  <MuiMenuItem key="kishore" value="kishore">
+                    Kishore
+                  </MuiMenuItem>
+                  <MuiMenuItem key="prithive" value="prithive">
+                    Prithive
+                  </MuiMenuItem>
+                  <MuiMenuItem key="vasanthakumar" value="vasanthakumar">
+                    Vasanthakumar
+                  </MuiMenuItem>
+                  <MuiMenuItem key="saranKumar" value="saranKumar">
+                    Saran Kumar
+                  </MuiMenuItem>
+                </MuiSelect>
+              </FormControl>
+              {/* <Select
                 name="activityPerson"
                 value={formik.values.activityPerson}
                 onChange={(e) => formik.setFieldValue("activityPerson", e)}
@@ -403,7 +475,7 @@ export default function CreateCustomerModal({
                 <MenuItem value="prithive">Prithive</MenuItem>
                 <MenuItem value="vasanthakumar">Vasanthakumar</MenuItem>
                 <MenuItem value="saranKumar">Saran Kumar</MenuItem>
-              </Select>
+              </Select> */}
             </Grid>
 
             <Grid item xs={12} md={6}>
