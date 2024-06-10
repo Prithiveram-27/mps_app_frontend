@@ -7,6 +7,7 @@ import CustomerListing from "../Pages/CustomerListing/CustomerListingScreen";
 import ProductListing from "../Pages/Product/productListing";
 import CreateService from "../Pages/Services/listServiceScreen";
 import Sidebar from "../components/sidenav";
+import CustomerHistory from "../Pages/CustomerHistory/CustomerHistory";
 
 export default function AppRouter() {
   return (
@@ -19,6 +20,7 @@ export default function AppRouter() {
           <Route path="/CustomerListing" element={<CustomerListing />} />
           <Route path="/ProductListing" element={<ProductListing />} />
           <Route path="/CreateService" element={<CreateService />} />
+          <Route path="/CustomerHistory" element={<CustomerHistory />} />
         </Routes>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -6,15 +6,21 @@ import {
   CDBSidebarHeader,
   CDBSidebarMenu,
   CDBSidebarMenuItem,
-} from 'cdbreact';
-import { NavLink } from 'react-router-dom';
+} from "cdbreact";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
-      <CDBSidebar textColor="#fff" backgroundColor='#0C2D48' toggled={true}>
+    <div
+      style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
+    >
+      <CDBSidebar textColor="#fff" backgroundColor="#0C2D48" toggled={true}>
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+          <a
+            href="/"
+            className="text-decoration-none"
+            style={{ color: "inherit" }}
+          >
             MPS PURIFIER
           </a>
         </CDBSidebarHeader>
@@ -24,29 +30,54 @@ const Sidebar = () => {
             <NavLink exact to="/" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="columns">Dashboard</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/CustomerListing" activeClassName="activeClicked">
+            <NavLink
+              exact
+              to="/CustomerListing"
+              activeClassName="activeClicked"
+            >
               <CDBSidebarMenuItem icon="table">Customers</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/ProductListing" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon= "shopping-bag" >Products</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="shopping-bag">
+                Products
+              </CDBSidebarMenuItem>
+            </NavLink>
+            <NavLink
+              exact
+              to="/CustomerHistory"
+              activeClassName="activeClicked"
+            >
+              <CDBSidebarMenuItem icon="history">History</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/CreateService" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="fas fa-cogs"> Services</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="fas fa-cogs">
+                {" "}
+                Services
+              </CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/analytics" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="chart-line">Settings</CDBSidebarMenuItem>
+              <CDBSidebarMenuItem icon="chart-line">
+                Settings
+              </CDBSidebarMenuItem>
             </NavLink>
 
-            <NavLink exact to="/hero404" target="_blank" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="exclamation-circle">Logout</CDBSidebarMenuItem>
+            <NavLink
+              exact
+              to="/hero404"
+              target="_blank"
+              activeClassName="activeClicked"
+            >
+              <CDBSidebarMenuItem icon="exclamation-circle">
+                Logout
+              </CDBSidebarMenuItem>
             </NavLink>
           </CDBSidebarMenu>
         </CDBSidebarContent>
 
-        <CDBSidebarFooter style={{ textAlign: 'center' }}>
+        <CDBSidebarFooter style={{ textAlign: "center" }}>
           <div
             style={{
-              padding: '20px 5px',
+              padding: "20px 5px",
             }}
           >
             All Rights Reserved.
