@@ -1,0 +1,79 @@
+.search-input {
+  width: 300px;
+  height: 30px;
+  border-radius: 20px;
+  border: 1px solid #2d9596;
+}
+
+.search-button {
+  border-radius: 20px;
+  border-color: #265073;
+  color: #2d9596;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #2d9596;
+  color: white;
+}
+
+.customer-field {
+  width: 80%;
+}
+
+/* to change text display color */
+.rs-picker-date > .rs-input-group.rs-input-group-inside .rs-input {
+  color: black !important;
+}
+
+.rs-picker-disabled {
+  opacity: 1 !important;
+}
+
+.rs-input-group.rs-input-group-inside {
+  border: 1px solid #d7d7d7 !important;
+}
+
+.rs-input-group-addon {
+  display: none !important;
+}
+
+.placement-bottom-start {
+  z-index: 99 !important;
+}
+
+.rs-picker-daterange-menu {
+  z-index: 10000000000 !important;
+}
+
+.rs-picker-daterange-content {
+  z-index: 10000000000 !important;
+}
+
+.rs-picker-menu {
+  z-index: 99999 !important;
+}
+.rs-picker-popup.rs-picker-popup-date {
+  z-index: 9999999 !important;
+}
+
+.customer-field-label {
+  color: black !important;
+}
+
+.notificationSuccess {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+  color: green !important;
+}
+
+.notificationError {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+  color: red !important;
+}
+
+.customer-view-header {
+  font-weight: 700 !important;
+}
