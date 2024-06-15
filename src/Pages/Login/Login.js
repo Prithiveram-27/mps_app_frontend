@@ -17,9 +17,7 @@ export default function Login({ setAuthDetails }) {
   const [error, setError] = useState(null);
 
   const loginSchema = Yup.object().shape({
-    email: Yup.string()
-      .email("Please enter a valid email")
-      .required("Email is required."),
+    email: Yup.string().required("Email is required."),
 
     password: Yup.string()
       .min(8, "Password must be atleast 8 characters long.")
@@ -35,24 +33,24 @@ export default function Login({ setAuthDetails }) {
         username: values?.email,
         password: values?.password,
       };
-      setAuthDetails({ id: "jbfshb", token: "mhbsdfjhsebgher656844" });
-      localStorage.setItem(
-        "authToken",
-        JSON.stringify({ id: "jbfshb", token: "mhbsdfjhsebgher656844" })
-      );
-      navigate("/dashboard");
-      // axios
-      //   .post("http://localhost:3000/login", postData)
-      //   .then((res) => {
-      //     console.log("login success", res);
-      //     localStorage.setItem("authToken", JSON.stringify(res.data));
-      //     setAuthDetails(res.data)
-      //     navigate("/dashboard");
-      //   })
-      //   .catch((error) => {
-      //     console.log("error", error);
-      //     setError("Something went wrong. Please try again.");
-      //   });
+      // setAuthDetails({ id: "jbfshb", token: "mhbsdfjhsebgher656844" });
+      // localStorage.setItem(
+      //   "authToken",
+      //   JSON.stringify({ id: "jbfshb", token: "mhbsdfjhsebgher656844" })
+      // );
+      // navigate("/dashboard");
+      axios
+        .post("http://localhost:3000/api/v1/user/login", postData)
+        .then((res) => {
+          console.log("login success", res);
+          localStorage.setItem("authToken", JSON.stringify(res.data));
+          setAuthDetails(res.data);
+          navigate("/dashboard");
+        })
+        .catch((error) => {
+          console.log("error", error);
+          setError("Something went wrong. Please try again.");
+        });
     },
     validateOnChange: false,
     enableReinitialize: true,
@@ -103,7 +101,7 @@ export default function Login({ setAuthDetails }) {
               <TextField
                 style={{ width: "100%" }}
                 size="small"
-                label="Email"
+                label="Username"
                 key="email"
                 name="email"
                 id="email"

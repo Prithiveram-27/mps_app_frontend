@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./dashboardScreen.css";
 import { Card, Button, Col, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import CreateNavbar from "../../components/navbar";
+import axios from "axios";
 
 const DashboardCard = ({ title, count, icon, color }) => {
   return (
@@ -29,12 +30,16 @@ const DashboardCard = ({ title, count, icon, color }) => {
 };
 
 const Dashboard = () => {
-  const counts = {
-    completed: 10,
-    ongoing: 5,
-    pending: 3,
-    cancelled: 2,
-  };
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v1/dashboard/counts")
+      .then((res) => {
+        console.log("dashboard res", res);
+      })
+      .catch((err) => {
+        console.log("dashbo err", err);
+      });
+  });
 
   return (
     <div>
@@ -43,25 +48,25 @@ const Dashboard = () => {
         <Row>
           <DashboardCard
             title="Completed"
-            count={counts.completed}
+            count={0}
             icon="check_circle"
             color="green"
           />
           <DashboardCard
             title="Ongoing"
-            count={counts.ongoing}
+            count={0}
             icon="clock_loader_10"
             color="orange"
           />
           <DashboardCard
             title="Pending"
-            count={counts.pending}
+            count={0}
             icon="pending"
             color="gray"
           />
           <DashboardCard
             title="Cancelled"
-            count={counts.cancelled}
+            count={0}
             icon="cancel"
             color="red"
           />
