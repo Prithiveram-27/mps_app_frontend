@@ -35,13 +35,13 @@ const Dashboard = () => {
     axios
       .get("http://localhost:3000/api/v1/dashboard/counts")
       .then((res) => {
-        console.log("dashboard res", res);
-        setCount(res);
+        console.log("dashboard res", res?.data);
+        setCount(res?.data);
       })
       .catch((err) => {
         console.log("dashbo err", err);
       });
-  });
+  }, []);
 
   return (
     <div>

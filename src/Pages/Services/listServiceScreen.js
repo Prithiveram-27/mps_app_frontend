@@ -180,6 +180,7 @@ const CreateService = () => {
               <th width="100">Service Person</th>
               <th width="100">Problem Type</th>
               <th width="100">Product Status</th>
+              <th width="100">Service Status</th>
               <th width="100">Actions</th>
             </tr>
           </thead>
@@ -196,6 +197,7 @@ const CreateService = () => {
                 <td>{service.service.serviceperson}</td>
                 <td>{service.service.problemtype}</td>
                 <td>{service.service.productstatus}</td>
+                <td>{service.service.servicestatus || "-"}</td>
                 <td>
                   <Tooltip placement="top-start" title="View">
                     <IconButton

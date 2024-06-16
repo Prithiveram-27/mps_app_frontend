@@ -190,7 +190,8 @@ export default function CreateServiceModal({
     postData.amc = "disabled";
     postData.activityType = "sales";
     postData.brand = values?.productBrand;
-    postData.amount = "0";
+    postData.amount = values?.amount;
+    postData.servicestatus = "pending";
     console.log("Create Customer postdata", postData);
 
     axios
@@ -412,13 +413,17 @@ export default function CreateServiceModal({
             ) : null}
           </Grid>
           <Grid item xs={12} md={6}>
-            <InputLabel
-              className="customer-field-label"
-              id="demo-simple-select-label"
-            >
-              Problem Type <span style={{ color: "red" }}>*</span>
-            </InputLabel>
-            <Select
+            <TextField
+              required
+              label="Problem Type"
+              placeholder="Problem Type"
+              id="customer-problem-type"
+              containerClass="customer-field"
+              name="problemType"
+              value={formik.values.problemType}
+              onChange={formik.handleChange}
+            />
+            {/* <Select
               name="problemType"
               value={formik.values.problemType}
               onChange={(e) => formik.setFieldValue("problemType", e)}
@@ -426,7 +431,7 @@ export default function CreateServiceModal({
               <MenuItem value=""></MenuItem>
               <MenuItem value="Option 1">Option 1</MenuItem>
               <MenuItem value="Option 2">Option 2</MenuItem>
-            </Select>
+            </Select> */}
             {formik.errors.problemType ? (
               <InputLabel sx={{ color: "red !important" }}>
                 {formik.errors.problemType}
@@ -523,6 +528,19 @@ export default function CreateServiceModal({
               }}
               name="date"
               value={formik.values.date}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <TextField
+              label="Amount"
+              placeholder="Amount"
+              id="amount"
+              containerClass="customer-field"
+              name="amount"
+              value={formik.values.amount}
+              onChange={formik.handleChange}
+              type="number"
             />
           </Grid>
 

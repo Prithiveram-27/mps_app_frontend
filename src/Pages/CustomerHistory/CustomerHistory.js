@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import CreateNavbar from "../../components/navbar";
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { TextField } from "../../components/textField/TextField";
 import axios from "axios";
 import ViewCustomerHistoryModal from "./ViewCustomerHistoryModal";
+import { Table } from "react-bootstrap";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function CustomerHistory() {
   const [searchValue, setSearchValue] = useState(null);
@@ -83,39 +92,51 @@ export default function CustomerHistory() {
           </Grid>
         )}
 
-        {customerHistoryData &&
-          customerHistoryData?.services?.map((service) => {
-            return (
-              <Grid item xs={12} marginTop={3}>
-                <Card
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setCurrentServiceData(service);
-                    setOpenCustomerHistoryViewModal(true);
-                  }}
-                >
-                  <CardContent>
-                    <Typography>
-                      <span style={{ fontWeight: "700" }}>Name: </span>{" "}
-                      {customerHistoryData?.customer?.name}
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: "700" }}>Mobile Number: </span>{" "}
-                      {customerHistoryData?.customer?.mobilenumber}
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: "700" }}>Problem Type: </span>
-                      {service?.service?.problemtype}
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: "700" }}>Amount: </span>
-                      {customerHistoryData?.customer?.amount}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })}
+        {customerHistoryData && (
+          <Grid item xs={12} padding={1} marginTop={3}>
+            <Table table-striped bordered hover className="custom-table">
+              <thead>
+                <tr>
+                  <th width="30">ID</th>
+                  <th width="120">Customer Name</th>
+                  <th width="100">Mobile Number</th>
+                  <th width="100">Problem Type</th>
+                  <th width="100">Amount</th>
+                  <th width="100">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customerHistoryData?.services?.map((service, index) => (
+                  <tr
+                    className={`table_font_color ${
+                      index % 2 === 0 ? "table-striped" : ""
+                    }`}
+                    key={index}
+                  >
+                    <td>{customerHistoryData?.customer?.id}</td>
+                    <td>{customerHistoryData?.customer?.name}</td>
+                    <td>{customerHistoryData?.customer?.mobilenumber}</td>
+                    <td>{service?.service?.problemtype}</td>
+                    <td>{customerHistoryData?.customer?.amount}</td>
+                    <td>
+                      <Tooltip placement="top-start" title="View">
+                        <IconButton
+                          onClick={() => {
+                            setCurrentServiceData(service);
+                            setOpenCustomerHistoryViewModal(true);
+                          }}
+                          aria-label="view"
+                        >
+                          <VisibilityIcon sx={{ color: "blue" }} />
+                        </IconButton>
+                      </Tooltip>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Grid>
+        )}
       </Grid>
     </>
   );

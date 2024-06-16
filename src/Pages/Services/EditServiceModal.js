@@ -62,6 +62,7 @@ export default function EditServiceModal({
     problemStatus: currentService?.service?.productstatus,
     servicePerson: currentService?.service?.serviceperson,
     problemDescription: currentService?.service?.problemdescription,
+    amount: currentService?.service?.amount,
   };
   const formik = useFormik({
     initialValues: { ...initial },
@@ -165,7 +166,17 @@ export default function EditServiceModal({
               ) : null}
             </Grid>
             <Grid item xs={12} md={6}>
-              <InputLabel
+              <TextField
+                required
+                label="Problem Type"
+                placeholder="Problem Type"
+                id="customer-problem-type"
+                containerClass="customer-field"
+                name="problemType"
+                value={formik.values.problemType}
+                onChange={formik.handleChange}
+              />
+              {/* <InputLabel
                 className="customer-field-label"
                 id="demo-simple-select-label"
               >
@@ -179,7 +190,7 @@ export default function EditServiceModal({
                 <MenuItem value=""></MenuItem>
                 <MenuItem value="Option 1">Option 1</MenuItem>
                 <MenuItem value="Option 2">Option 2</MenuItem>
-              </Select>
+              </Select> */}
               {formik.errors.problemType ? (
                 <InputLabel sx={{ color: "red !important" }}>
                   {formik.errors.problemType}
@@ -258,6 +269,18 @@ export default function EditServiceModal({
                   {formik.errors.servicePerson}
                 </InputLabel>
               ) : null}
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Amount"
+                placeholder="Amount"
+                id="amount"
+                containerClass="customer-field"
+                name="amount"
+                value={formik.values.amount}
+                onChange={formik.handleChange}
+                type="number"
+              />
             </Grid>
             <Grid item xs={12} container>
               <Grid item xs={12} md={10} textAlign="end">

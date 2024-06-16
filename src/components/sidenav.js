@@ -7,9 +7,10 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <div
       style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
@@ -49,11 +50,7 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem icon="history">History</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink
-              exact
-              to="/UserListing"
-              activeClassName="activeClicked"
-            >
+            <NavLink exact to="/UserListing" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="user">Users</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/CreateService" activeClassName="activeClicked">
@@ -70,8 +67,10 @@ const Sidebar = () => {
 
             <NavLink
               exact
-              to="/hero404"
-              target="_blank"
+              onClick={() => {
+                localStorage.clear();
+                window.location.reload();
+              }}
               activeClassName="activeClicked"
             >
               <CDBSidebarMenuItem icon="exclamation-circle">
