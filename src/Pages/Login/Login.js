@@ -164,6 +164,15 @@ export default function Login({ setAuthDetails }) {
                 LOGIN
               </Button>
             </Grid>
+            <Grid item xs={12} textAlign="center">
+              <Button
+                variant="contained"
+                onClick={() => navigate("/register")}
+                className={classes.field}
+              >
+                Register
+              </Button>
+            </Grid>
           </Grid>
         </form>
       </Grid>
