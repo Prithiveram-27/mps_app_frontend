@@ -101,6 +101,7 @@ export default function CreateEditProductModal({
 
           <Grid item xs={12}>
             <TextField
+              type="number"
               required
               label="Product Amount"
               placeholder="Product Amount"

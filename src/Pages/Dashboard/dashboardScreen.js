@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./dashboardScreen.css";
 import { Card, Button, Col, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
@@ -30,11 +30,13 @@ const DashboardCard = ({ title, count, icon, color }) => {
 };
 
 const Dashboard = () => {
+  const [count, setCount] = useState(null);
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/v1/dashboard/counts")
       .then((res) => {
         console.log("dashboard res", res);
+        setCount(res);
       })
       .catch((err) => {
         console.log("dashbo err", err);
@@ -47,26 +49,26 @@ const Dashboard = () => {
       <div className="dashboard">
         <Row>
           <DashboardCard
+            title="Customers"
+            count={count?.totalCustomers}
+            icon="person"
+            color="orange"
+          />
+          <DashboardCard
             title="Completed"
-            count={0}
+            count={count?.totalCompletedServices}
             icon="check_circle"
             color="green"
           />
           <DashboardCard
-            title="Ongoing"
-            count={0}
-            icon="clock_loader_10"
-            color="orange"
-          />
-          <DashboardCard
             title="Pending"
-            count={0}
+            count={count?.totalPendingServices}
             icon="pending"
             color="gray"
           />
           <DashboardCard
             title="Cancelled"
-            count={0}
+            count={count?.totalCancelledServices}
             icon="cancel"
             color="red"
           />

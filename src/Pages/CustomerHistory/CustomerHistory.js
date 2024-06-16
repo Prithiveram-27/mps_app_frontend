@@ -86,7 +86,7 @@ export default function CustomerHistory() {
         {customerHistoryData &&
           customerHistoryData?.services?.map((service) => {
             return (
-              <Grid item xs={3} marginTop={3}>
+              <Grid item xs={12} marginTop={3}>
                 <Card
                   sx={{ cursor: "pointer" }}
                   onClick={() => {

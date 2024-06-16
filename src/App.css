@@ -53,3 +53,16 @@
 .button-mps:hover {
   background-color: #0c2d48; /* Darken the color on hover if desired */
 }
+
+.title {
+  font-weight: 700 !important;
+  font-size: 24px !important;
+}
+
+.field-header {
+  color: black !important;
+}
+
+.required {
+  color: red !important;
+}
