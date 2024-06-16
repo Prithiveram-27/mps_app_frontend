@@ -42,6 +42,7 @@ export default function Signup() {
     validateOnChange: false,
     enableReinitialize: true,
     onSubmit: (values) => {
+      values.email = values.email ? values.email : "";
       values["is_admin"] = false;
       console.log("signup values", values);
       axios
