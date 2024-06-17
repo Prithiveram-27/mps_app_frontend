@@ -11,19 +11,21 @@ const DashboardCard = ({ title, count, icon, color }) => {
       <Card className="h-100 shadow">
         <Card.Body>
           <span
-            style={{ color: color, fontSize: 30 }}
+            style={{ color: color, fontSize: 40 }}
             class="material-symbols-outlined"
           >
             {icon}
           </span>
-          <Card.Title className="ml-2">{title}</Card.Title>
-          <Card.Text className="text-center">{count}</Card.Text>
+          <Card.Title className="ml-2" style={{ fontSize: "24px" }}>
+            {title}
+          </Card.Title>
+          <Card.Text
+            className="text-center"
+            style={{ fontSize: "22px", fontWeight: "700" }}
+          >
+            {count}
+          </Card.Text>
         </Card.Body>
-        <Card.Footer>
-          <Button className="button-mps" block>
-            View Details
-          </Button>
-        </Card.Footer>
       </Card>
     </Col>
   );
