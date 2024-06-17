@@ -224,7 +224,8 @@ const CreateService = () => {
                   <Tooltip placement="top-start" title="Delete">
                     <IconButton
                       onClick={() => {
-                        setCurrentService(JSON.stringify(service));
+                        console.log("Delete service", service);
+                        setCurrentService(service);
                         setOpenDeleteServiceModal(true);
                       }}
                       aria-label="delete"

@@ -25,15 +25,15 @@ export default function DeleteServiceModal({
   currentService,
   getData,
 }) {
-  console.log("current service: " + currentService);
   const [notification, setNotification] = useState(null);
   const [openNotification, setOpenNotification] = useState(false);
   const [notificationSeverity, setNotificationSeverity] = useState("");
 
   const deleteServiceHandler = () => {
-    console.log("current customer", currentService);
     axios
-      .delete(`http://localhost:3000/api/v1/service/`)
+      .delete(
+        `http://localhost:3000/api/v1/service/deleteService?serviceId=${currentService?.service?.serviceid}`
+      )
       .then(() => {
         setOpenNotification(true);
         setNotification("Service deleted successfully!");
