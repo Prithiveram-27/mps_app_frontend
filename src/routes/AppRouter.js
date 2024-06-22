@@ -10,18 +10,23 @@ import Sidebar from "../components/sidenav";
 import CustomerHistory from "../Pages/CustomerHistory/CustomerHistory";
 import UserListing from "../Pages/User/UserListing";
 
-
-export default function AppRouter() {
+export default function AppRouter({ userLoggedIn }) {
   return (
     <div className="App">
-      <Sidebar />
+      <Sidebar userLoggedIn={userLoggedIn} />
       <div className="content">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/CustomerListing" element={<CustomerListing />} />
+          <Route
+            path="/CustomerListing"
+            element={<CustomerListing userLoggedIn={userLoggedIn} />}
+          />
           <Route path="/ProductListing" element={<ProductListing />} />
-          <Route path="/CreateService" element={<CreateService />} />
+          <Route
+            path="/CreateService"
+            element={<CreateService userLoggedIn={userLoggedIn} />}
+          />
           <Route path="/CustomerHistory" element={<CustomerHistory />} />
           <Route path="/UserListing" element={<UserListing />} />
         </Routes>

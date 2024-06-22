@@ -9,8 +9,11 @@ import {
 } from "cdbreact";
 import { NavLink, useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ userLoggedIn }) => {
   const navigate = useNavigate();
+  console.log("sidebar user logged in", userLoggedIn);
+  const isAdmin = userLoggedIn ? userLoggedIn.is_admin : false;
+
   return (
     <div
       style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
@@ -50,9 +53,18 @@ const Sidebar = () => {
             >
               <CDBSidebarMenuItem icon="history">History</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/UserListing" activeClassName="activeClicked">
+            <NavLink
+              // className={isAdmin ? "d-none" : ""}
+              style={{
+                display: !isAdmin ? "none" : "",
+              }}
+              exact
+              to="/UserListing"
+              activeClassName="activeClicked"
+            >
               <CDBSidebarMenuItem icon="user">Users</CDBSidebarMenuItem>
             </NavLink>
+
             <NavLink exact to="/CreateService" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="fas fa-cogs">
                 {" "}

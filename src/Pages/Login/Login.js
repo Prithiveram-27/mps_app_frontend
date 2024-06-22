@@ -11,7 +11,7 @@ import loginImage from "../../assets/login-img.jpg";
 import logo from "../../assets/logo.png";
 import { TextField } from "../../components/textField/TextField";
 
-export default function Login({ setAuthDetails }) {
+export default function Login({ setAuthDetails, setuserLoggedIn }) {
   const classes = useStyles();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -43,8 +43,10 @@ export default function Login({ setAuthDetails }) {
         .post("http://localhost:3000/api/v1/user/login", postData)
         .then((res) => {
           console.log("login success", res);
-          localStorage.setItem("authToken", JSON.stringify(res.data));
-          setAuthDetails(res.data);
+          localStorage.setItem("authToken", JSON.stringify(res.data.token));
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+          setAuthDetails(res.data.token);
+          setuserLoggedIn(res.data.user);
           navigate("/dashboard");
         })
         .catch((error) => {

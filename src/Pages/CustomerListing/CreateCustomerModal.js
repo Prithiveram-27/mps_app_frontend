@@ -105,6 +105,21 @@ export default function CreateCustomerModal({
       },
       message: "AMC end date is required.",
     }),
+    isEmienabled: Yup.string(),
+    emiAmount: Yup.string().test({
+      name: "emiAmount",
+      test: function (value) {
+        return this.parent.isEmienabled === "enabled" ? !!value : true;
+      },
+      message: "EMI amount is required.",
+    }),
+    emiMonths: Yup.string().test({
+      name: "emiMonths",
+      test: function (value) {
+        return this.parent.isEmienabled === "enabled" ? !!value : true;
+      },
+      message: "EMI months is required.",
+    }),
   });
 
   let initial = {
@@ -112,6 +127,7 @@ export default function CreateCustomerModal({
     activityType: "sales",
     nextServiceDate: futureDate,
     amc: "disabled",
+    isEmienabled: "disabled",
   };
 
   if (isCustomerEdit) {
@@ -554,6 +570,69 @@ export default function CreateCustomerModal({
                   {formik.errors.amcEndDate ? (
                     <InputLabel sx={{ color: "red !important" }}>
                       {formik.errors.amcEndDate}
+                    </InputLabel>
+                  ) : null}
+                </Grid>
+              </>
+            )}
+
+            <Grid item xs={12} md={6}>
+              <InputLabel
+                className="customer-field-label"
+                id="demo-simple-select-label"
+              >
+                EMI
+              </InputLabel>
+              <Select
+                name="isEmienabled"
+                value={formik.values.isEmienabled}
+                onChange={(e) => {
+                  console.log("isEmienabled value", e);
+                  formik.setFieldValue("isEmienabled", e);
+                }}
+              >
+                <MenuItem value="enabled">Enabled</MenuItem>
+                <MenuItem value="disabled">Disabled</MenuItem>
+              </Select>
+            </Grid>
+
+            {formik.values.isEmienabled === "enabled" && (
+              <>
+                <Grid item xs={12} md={6}>
+                  <InputLabel className="customer-field-label">
+                    EMI Amount
+                  </InputLabel>
+                  <Select
+                    name="emiAmount"
+                    value={formik.values.emiAmount}
+                    onChange={(e) => {
+                      console.log("emiAmount value", e);
+                      formik.setFieldValue("emiAmount", e);
+                    }}
+                  >
+                    <MenuItem value="enabled">Enabled</MenuItem>
+                    <MenuItem value="disabled">Disabled</MenuItem>
+                  </Select>
+                  {formik.errors.emiAmount ? (
+                    <InputLabel sx={{ color: "red !important" }}>
+                      {formik.errors.emiAmount}
+                    </InputLabel>
+                  ) : null}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    type="number"
+                    label="EMI Months"
+                    id="customer-emi-months"
+                    placeholder="EMI Months"
+                    containerClass="customer-field"
+                    name="emiMonths"
+                    value={formik.values.emiMonths}
+                    onChange={formik.handleChange}
+                  />
+                  {formik.errors.emiMonths ? (
+                    <InputLabel sx={{ color: "red !important" }}>
+                      {formik.errors.emiMonths}
                     </InputLabel>
                   ) : null}
                 </Grid>

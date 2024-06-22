@@ -27,7 +27,7 @@ import DeleteServiceModal from "./DeleteServiceModal";
 import ViewServiceModal from "./ViewServiceModal";
 import EditServiceModal from "./EditServiceModal";
 
-const CreateService = () => {
+const CreateService = ({ userLoggedIn }) => {
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
@@ -157,14 +157,16 @@ const CreateService = () => {
             Services
           </Typography>
         </div>
-        <div style={{ width: "50%", textAlign: "end" }}>
-          <Button
-            className="button-mps"
-            onClick={() => setOpenAddServiceModal(true)}
-          >
-            + Add Service
-          </Button>
-        </div>
+        {userLoggedIn?.is_admin && (
+          <div style={{ width: "50%", textAlign: "end" }}>
+            <Button
+              className="button-mps"
+              onClick={() => setOpenAddServiceModal(true)}
+            >
+              + Add Service
+            </Button>
+          </div>
+        )}
       </div>
       {showPreloader && (
         <div className="preloader-container">
@@ -181,7 +183,7 @@ const CreateService = () => {
               <th width="100">Problem Type</th>
               <th width="100">Product Status</th>
               <th width="100">Service Status</th>
-              <th width="100">Actions</th>
+              {userLoggedIn?.is_admin && <th width="100">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -198,42 +200,44 @@ const CreateService = () => {
                 <td>{service.service.problemtype}</td>
                 <td>{service.service.productstatus}</td>
                 <td>{service.service.servicestatus || "-"}</td>
-                <td>
-                  <Tooltip placement="top-start" title="View">
-                    <IconButton
-                      onClick={() => {
-                        setCurrentService(service);
-                        setOpenViewServiceModal(true);
-                      }}
-                      aria-label="view"
-                    >
-                      <VisibilityIcon sx={{ color: "blue" }} />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip placement="top-start" title="Edit">
-                    <IconButton
-                      onClick={() => {
-                        setCurrentService(service);
-                        setOpenEditServiceModal(true);
-                      }}
-                      aria-label="edit"
-                    >
-                      <BorderColorIcon sx={{ color: "blue" }} />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip placement="top-start" title="Delete">
-                    <IconButton
-                      onClick={() => {
-                        console.log("Delete service", service);
-                        setCurrentService(service);
-                        setOpenDeleteServiceModal(true);
-                      }}
-                      aria-label="delete"
-                    >
-                      <DeleteIcon sx={{ color: "red" }} />
-                    </IconButton>
-                  </Tooltip>
-                </td>
+                {userLoggedIn?.is_admin && (
+                  <td>
+                    <Tooltip placement="top-start" title="View">
+                      <IconButton
+                        onClick={() => {
+                          setCurrentService(service);
+                          setOpenViewServiceModal(true);
+                        }}
+                        aria-label="view"
+                      >
+                        <VisibilityIcon sx={{ color: "blue" }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip placement="top-start" title="Edit">
+                      <IconButton
+                        onClick={() => {
+                          setCurrentService(service);
+                          setOpenEditServiceModal(true);
+                        }}
+                        aria-label="edit"
+                      >
+                        <BorderColorIcon sx={{ color: "blue" }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip placement="top-start" title="Delete">
+                      <IconButton
+                        onClick={() => {
+                          console.log("Delete service", service);
+                          setCurrentService(service);
+                          setOpenDeleteServiceModal(true);
+                        }}
+                        aria-label="delete"
+                      >
+                        <DeleteIcon sx={{ color: "red" }} />
+                      </IconButton>
+                    </Tooltip>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

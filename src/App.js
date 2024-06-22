@@ -7,6 +7,9 @@ function App() {
   const [authDetails, setAuthDetails] = useState(() =>
     localStorage.getItem("authToken") ? localStorage.getItem("authToken") : null
   );
+  const [userLoggedIn, setuserLoggedIn] = useState(() =>
+    localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+  );
 
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -18,12 +21,17 @@ function App() {
     }
   }, [authDetails]);
 
+  console.log("userlogged in", userLoggedIn);
+
   return (
     <div>
       {authDetails === null ? (
-        <AuthRouter setAuthDetails={setAuthDetails} />
+        <AuthRouter
+          setAuthDetails={setAuthDetails}
+          setuserLoggedIn={setuserLoggedIn}
+        />
       ) : (
-        <AppRouter />
+        <AppRouter userLoggedIn={userLoggedIn} />
       )}
 
       {/* <div className="App">

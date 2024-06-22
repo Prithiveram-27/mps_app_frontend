@@ -18,7 +18,7 @@ import CreateCustomerModal from "./CreateCustomerModal";
 import ViewCustomerModal from "./ViewCustomerModal";
 import { TextField } from "../../components/textField/TextField";
 
-const CustomerListing = ({ items }) => {
+const CustomerListing = ({ userLoggedIn }) => {
   // State to store the fetched data
   const [customerData, setCustomerData] = useState([]);
 
@@ -44,6 +44,7 @@ const CustomerListing = ({ items }) => {
       }
       const data = await response.json();
       setCustomerData(data.customers);
+      console.log("data", data);
     } catch (error) {
       console.error("Error:", error);
       setOpenNotification(true);
@@ -163,9 +164,11 @@ const CustomerListing = ({ items }) => {
           onChange={(e) => setSearchValue(e.target.value)}
         />
         {/* <Link to="/createCustomer"> */}
+        {/* {userLoggedIn?.is_admin && ( */}
         <button onClick={createCustomerBtnHandler} class="btn btn-primary">
           + Add Customer
         </button>
+        {/* )} */}
         {/* </Link> */}
       </div>
       {/* <Container> */}
@@ -177,7 +180,7 @@ const CustomerListing = ({ items }) => {
               <th width="120">Customer Name</th>
               <th width="100">Mobile Number</th>
               <th width="100">Customer Address</th>
-              <th width="100">Actions</th>
+              {userLoggedIn?.is_admin && <th width="100">Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -192,57 +195,44 @@ const CustomerListing = ({ items }) => {
                 <td>{customer.name}</td>
                 <td>{customer.mobilenumber}</td>
                 <td>{customer.address}</td>
-                <td>
-                  <Tooltip placement="top-start" title="View">
-                    <IconButton
-                      onClick={() => {
-                        setCurrentCustomer(customer);
-                        setOpenViewCustomerModal(true);
-                      }}
-                      aria-label="view"
-                    >
-                      <VisibilityIcon sx={{ color: "blue" }} />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip placement="top-start" title="Edit">
-                    <IconButton
-                      onClick={() => {
-                        setIsCustomerEdit(true);
-                        setCurrentCustomer(customer);
-                        setOpenCreateCustomerModal(true);
-                      }}
-                      aria-label="delete"
-                    >
-                      <BorderColorIcon sx={{ color: "blue" }} />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip placement="top-start" title="Delete">
-                    <IconButton
-                      onClick={() => {
-                        setOpenCustomerDeleteModal(true);
-                        setCurrentCustomer(customer);
-                      }}
-                      aria-label="delete"
-                    >
-                      <DeleteIcon sx={{ color: "red" }} />
-                    </IconButton>
-                  </Tooltip>
-                  {/* <Button
-                    variant="secondary"
-                    style={{ height: "40px", width: "80px" }}
-                    onClick={() => handleEditButtonClick(customer.customerId)}
-                  >
-                    Edit
-                  </Button>
-                  &nbsp;&nbsp;
-                  <Button
-                    variant="danger"
-                    style={{ height: "40px", width: "80px" }}
-                    onClick={() => handleEditButtonClick(customer.customerId)}
-                  >
-                    Delete
-                  </Button> */}
-                </td>
+                {userLoggedIn?.is_admin && (
+                  <td>
+                    <Tooltip placement="top-start" title="View">
+                      <IconButton
+                        onClick={() => {
+                          setCurrentCustomer(customer);
+                          setOpenViewCustomerModal(true);
+                        }}
+                        aria-label="view"
+                      >
+                        <VisibilityIcon sx={{ color: "blue" }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip placement="top-start" title="Edit">
+                      <IconButton
+                        onClick={() => {
+                          setIsCustomerEdit(true);
+                          setCurrentCustomer(customer);
+                          setOpenCreateCustomerModal(true);
+                        }}
+                        aria-label="delete"
+                      >
+                        <BorderColorIcon sx={{ color: "blue" }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip placement="top-start" title="Delete">
+                      <IconButton
+                        onClick={() => {
+                          setOpenCustomerDeleteModal(true);
+                          setCurrentCustomer(customer);
+                        }}
+                        aria-label="delete"
+                      >
+                        <DeleteIcon sx={{ color: "red" }} />
+                      </IconButton>
+                    </Tooltip>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
