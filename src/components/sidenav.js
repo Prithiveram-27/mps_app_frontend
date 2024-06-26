@@ -11,7 +11,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 const Sidebar = ({ userLoggedIn }) => {
   const navigate = useNavigate();
-  console.log("sidebar user logged in", userLoggedIn);
   const isAdmin = userLoggedIn ? userLoggedIn.is_admin : false;
 
   return (

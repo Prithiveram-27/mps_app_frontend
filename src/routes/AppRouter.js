@@ -9,8 +9,9 @@ import CreateService from "../Pages/Services/listServiceScreen";
 import Sidebar from "../components/sidenav";
 import CustomerHistory from "../Pages/CustomerHistory/CustomerHistory";
 import UserListing from "../Pages/User/UserListing";
+import UserNotification from "../Pages/UserNotification/UserNotification";
 
-export default function AppRouter({ userLoggedIn }) {
+export default function AppRouter({ userLoggedIn, userNotificationData }) {
   return (
     <div className="App">
       <Sidebar userLoggedIn={userLoggedIn} />
@@ -29,6 +30,12 @@ export default function AppRouter({ userLoggedIn }) {
           />
           <Route path="/CustomerHistory" element={<CustomerHistory />} />
           <Route path="/UserListing" element={<UserListing />} />
+          <Route
+            path="/UserNotification"
+            element={
+              <UserNotification userNotificationData={userNotificationData} />
+            }
+          />
         </Routes>
       </div>
     </div>

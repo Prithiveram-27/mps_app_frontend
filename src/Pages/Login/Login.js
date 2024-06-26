@@ -45,6 +45,10 @@ export default function Login({ setAuthDetails, setuserLoggedIn }) {
           console.log("login success", res);
           localStorage.setItem("authToken", JSON.stringify(res.data.token));
           localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem(
+            "notificationData",
+            JSON.stringify(res.data.filteredCustomers)
+          );
           setAuthDetails(res.data.token);
           setuserLoggedIn(res.data.user);
           navigate("/dashboard");

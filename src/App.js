@@ -11,6 +11,12 @@ function App() {
     localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
   );
 
+  const [userNotificationData, setUserNotificationData] = useState(() =>
+    localStorage.getItem("notificationData")
+      ? JSON.parse(localStorage.getItem("notificationData"))
+      : {}
+  );
+
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -21,8 +27,6 @@ function App() {
     }
   }, [authDetails]);
 
-  console.log("userlogged in", userLoggedIn);
-
   return (
     <div>
       {authDetails === null ? (
@@ -31,7 +35,10 @@ function App() {
           setuserLoggedIn={setuserLoggedIn}
         />
       ) : (
-        <AppRouter userLoggedIn={userLoggedIn} />
+        <AppRouter
+          userLoggedIn={userLoggedIn}
+          userNotificationData={userNotificationData}
+        />
       )}
 
       {/* <div className="App">
