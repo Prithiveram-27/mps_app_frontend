@@ -53,6 +53,17 @@ const userSchema = Yup.object().shape({
   address: Yup.string().required("Address is required."),
 });
 
+const editUserSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required."),
+  email: Yup.string().email("Please enter a valid email."),
+  mobilenumber: Yup.string()
+    .min("10", "Please enter a valid mobile number.")
+    .max("10", "Please enter a valid mobile number.")
+    .required("Mobile number is required."),
+  date_of_birth: Yup.date().required("Date of Birth is required"),
+  address: Yup.string().required("Address is required."),
+});
+
 export default function CreateUserModal({
   handleCloseAddUserModal,
   fetchData,
@@ -77,7 +88,7 @@ export default function CreateUserModal({
 
   const formik = useFormik({
     initialValues: { ...initialValues },
-    validationSchema: userSchema,
+    validationSchema: isUserEdit ? editUserSchema : userSchema,
     validateOnChange: false,
     enableReinitialize: true,
     onSubmit: (values) => {
@@ -204,26 +215,28 @@ export default function CreateUserModal({
                 </InputLabel>
               ) : null}
             </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Password"
-                placeholder="Password"
-                name="password"
-                required
-                id="user-password"
-                containerClass="user-field"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-              />
-              {formik.errors.password ? (
-                <InputLabel
-                  // className={classes.error}
-                  sx={{ color: "red !important" }}
-                >
-                  {formik.errors.password}
-                </InputLabel>
-              ) : null}
-            </Grid>
+            {!isUserEdit && (
+              <Grid item xs={12} md={6}>
+                <TextField
+                  label="Password"
+                  placeholder="Password"
+                  name="password"
+                  required
+                  id="user-password"
+                  containerClass="user-field"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                />
+                {formik.errors.password ? (
+                  <InputLabel
+                    // className={classes.error}
+                    sx={{ color: "red !important" }}
+                  >
+                    {formik.errors.password}
+                  </InputLabel>
+                ) : null}
+              </Grid>
+            )}
             <Grid item xs={12} md={6}>
               <TextField
                 label="Mobile Number"
@@ -371,7 +384,7 @@ export default function CreateUserModal({
                     formik.handleSubmit();
                   }}
                 >
-                  Add
+                  {isUserEdit ? "Update" : "Add"}
                 </Button>
                 {/* <button
                 type="submit"
