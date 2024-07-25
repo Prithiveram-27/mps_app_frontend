@@ -599,20 +599,17 @@ export default function CreateCustomerModal({
             {formik.values.isEmienabled === "enabled" && (
               <>
                 <Grid item xs={12} md={6}>
-                  <InputLabel className="customer-field-label">
-                    EMI Amount
-                  </InputLabel>
-                  <Select
+                  <TextField
+                    type="number"
+                    label="EMI Amount"
+                    id="customer-emi-amount"
+                    placeholder="EMI Amount"
+                    containerClass="customer-field"
                     name="emiAmount"
                     value={formik.values.emiAmount}
-                    onChange={(e) => {
-                      console.log("emiAmount value", e);
-                      formik.setFieldValue("emiAmount", e);
-                    }}
-                  >
-                    <MenuItem value="enabled">Enabled</MenuItem>
-                    <MenuItem value="disabled">Disabled</MenuItem>
-                  </Select>
+                    onChange={formik.handleChange}
+                  />
+
                   {formik.errors.emiAmount ? (
                     <InputLabel sx={{ color: "red !important" }}>
                       {formik.errors.emiAmount}
@@ -620,7 +617,7 @@ export default function CreateCustomerModal({
                   ) : null}
                 </Grid>
                 <Grid item xs={12} md={6}>
-                  <TextField
+                  {/* <TextField
                     type="number"
                     label="EMI Months"
                     id="customer-emi-months"
@@ -629,7 +626,21 @@ export default function CreateCustomerModal({
                     name="emiMonths"
                     value={formik.values.emiMonths}
                     onChange={formik.handleChange}
-                  />
+                  /> */}
+                  <InputLabel className="customer-field-label">
+                    EMI Months
+                  </InputLabel>
+                  <Select
+                    name="emiMonths"
+                    value={formik.values.emiMonths}
+                    onChange={(e) => {
+                      console.log("emiMonths value", e);
+                      formik.setFieldValue("emiMonths", e);
+                    }}
+                  >
+                    <MenuItem value="4">4 Months</MenuItem>
+                    <MenuItem value="3">3 Months</MenuItem>
+                  </Select>
                   {formik.errors.emiMonths ? (
                     <InputLabel sx={{ color: "red !important" }}>
                       {formik.errors.emiMonths}
